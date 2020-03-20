@@ -1,3 +1,4 @@
+#include <cuda_runtime.h>
 #include <cstdlib>
 #include <cstdio>
 #include <cmath>

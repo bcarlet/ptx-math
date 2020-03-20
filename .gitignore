@@ -58,3 +58,6 @@ dkms.conf
 *.ptx
 *.cubin
 *.fatbin
+
+# VS Code
+.vscode/
