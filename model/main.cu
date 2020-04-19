@@ -1,11 +1,8 @@
 #include <cuda_runtime.h>
-#include <cstdlib>
 #include <cstdio>
 #include <cmath>
 
-#define CUDA_CHECK(errcode) {cuda_err_check((errcode),__FILE__,__LINE__);}
-
-static void cuda_err_check(cudaError_t code, const char *file, int line);
+#include "cuda_check.h"
 
 __global__
 static void sine(int n, float *x)
@@ -54,15 +51,4 @@ int main()
     CUDA_CHECK(cudaFree(x));
 
     return 0;
-}
-
-void cuda_err_check(cudaError_t code, const char *file, int line)
-{
-    if (code != cudaSuccess)
-    {
-        fprintf(stderr, "CUDA error in file %s on line %d: %s\n",
-                file, line, cudaGetErrorString(code));
-        
-        exit(-1);
-    }
 }

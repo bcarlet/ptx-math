@@ -1,12 +1,13 @@
 NVCC = nvcc
 NVCCFLAGS =
-SOURCES = main.cu
+HEADERS = cuda_check.h
+SOURCES = main.cu cuda_check.cu
 TARGET = main
 
 .PHONY: clean check
 
-$(TARGET): $(SOURCES)
-	$(NVCC) -o $@ $^ $(NVCCFLAGS)
+$(TARGET): $(SOURCES) $(HEADERS)
+	$(NVCC) -o $@ $(SOURCES) $(NVCCFLAGS)
 
 check:
 	cuda-memcheck ./$(TARGET)
@@ -15,4 +16,4 @@ check:
 	cuda-memcheck --tool synccheck ./$(TARGET)
 
 clean:
-	-rm -f $(TARGET)
+	$(RM) $(TARGET)
