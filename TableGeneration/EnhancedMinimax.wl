@@ -18,7 +18,7 @@ infnorm[expr_, x_, {a_, b_}] :=
 	NMaxValue[Abs[expr], {x} \[Element] Interval[{a, b}]]
 
 roundbits[x_, b_] :=
-	2^(-b)*Round[x*2^b]
+	Round[x, 2^(-b)]
 
 computecoeffts[m_, t_, p_, q_] :=
 	Module[{errmax, expr, i, x, interval, poll, C1, a1, a2, aa2, C2, p0, C0, err, goodbits},

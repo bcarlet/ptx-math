@@ -1,7 +1,10 @@
 #!/usr/bin/env wolframscript
 (* ::Package:: *)
 
-SetDirectory[NotebookDirectory[]]
+SetDirectory[DirectoryName[$InputFileName]];
 Needs["EnhancedMinimax`"]
 
-computecoeffts[6, 26, 15, 11]
+fmt[output_] :=
+	MapAt[MantissaExponent[#, 2]&, output, 2]
+
+Print[fmt[computecoeffts[6, 25, 15, 11]]]
