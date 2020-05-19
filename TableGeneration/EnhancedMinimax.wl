@@ -2,6 +2,7 @@
 
 BeginPackage["EnhancedMinimax`"]
 Needs["FunctionApproximations`"]
+Needs["TableOutput`"]
 
 computecoeffts::usage = "computecoeffts[m, t, p, q] computes the coefficients with word lengths t, p, and q of the quadratic polynomial for square root on (1, 2), to be stored in a look-up table of 2^m entries."
 
@@ -20,11 +21,13 @@ infnorm[expr_, x_, {a_, b_}] :=
 roundbits[x_, b_] :=
 	Round[x, 2^(-b)]
 
-computecoeffts[m_, t_, p_, q_] :=
-	Module[{errmax, expr, i, x, interval, poll, C1, a1, a2, aa2, C2, p0, C0, err, goodbits},
+computecoeffts[m_, t_, p_, q_, filename_] :=
+	Module[{errmax, expr, i, x, interval, poll, C1, a1, a2, aa2, C2, p0, C0, err, out},
 		errmax = 0;
 		expr := Sqrt[1+1/(2^m)*i+x];
 		interval = {0, 1/(2^m)};
+
+		out = OpenWrite[filename];
 		
 		For[i = 0, i < 2^m, i++,
 			poll = minimax[expr, {x, interval, 2, 0}];
@@ -33,15 +36,17 @@ computecoeffts[m_, t_, p_, q_] :=
 			C1 = roundbits[a1, p];
 			aa2 = a2+(a1-C1)*2^m;
 			C2 = roundbits[aa2, q];
-			p0 = minimax[expr-C1*x-C2*x^2, {x, interval, 2, 0}]; (* incorrect numerator degree in Pineiro? *)
+			p0 = minimax[expr-C1*x-C2*x^2, {x, interval, 2, 0}]; (* Pineiro uses degree 0, Oberman uses degree 2 *)
 			C0 = roundbits[Coefficient[p0, x, 0], t];
 			err = infnorm[expr-C0-C1*x-C2*x^2, x, interval];
 			errmax = Max[errmax, err];
+
+			writecoeffts[out, C0, C1, C2, t, p, q];
 		];
+
+		Close[out];
 		
-		goodbits = Abs[Log[errmax]]/Log[2];
-		
-		{goodbits, errmax}
+		errmax
 	]
 
 End[]
