@@ -4,7 +4,7 @@ BeginPackage["EnhancedMinimax`"]
 Needs["FunctionApproximations`"]
 Needs["TableOutput`"]
 
-computecoeffts::usage = "computecoeffts[m, t, p, q] computes the coefficients with word lengths t, p, and q of the quadratic polynomial for square root on (1, 2), to be stored in a look-up table of 2^m entries."
+computecoeffts::usage = "computecoeffts[f, {a, b}, m, t, p, q, filename] computes the 2^m triplets of coefficients with word lengths t, p, and q of the quadratic polynomial for f on (a, b), to be outputted in filename."
 
 Begin["Private`"]
 
@@ -21,11 +21,12 @@ infnorm[expr_, x_, {a_, b_}] :=
 roundbits[x_, b_] :=
 	Round[x, 2^(-b)]
 
-computecoeffts[m_, t_, p_, q_, filename_] :=
-	Module[{errmax, expr, i, x, interval, poll, C1, a1, a2, aa2, C2, p0, C0, err, out},
+computecoeffts[f_, {a_, b_}, m_, t_, p_, q_, filename_] :=
+	Module[{errmax, length, interval, expr, i, x, out, poll, a1, a2, aa2, p0, C0, C1, C2, err},
 		errmax = 0;
-		expr := Sqrt[1+1/(2^m)*i+x];
-		interval = {0, 1/(2^m)};
+		length = (b-a)/(2^m);
+		interval = {0, length};
+		expr := f[a+length*i+x];
 
 		out = OpenWrite[filename];
 		

@@ -4,7 +4,7 @@
 SetDirectory[DirectoryName[$InputFileName]]
 Needs["EnhancedMinimax`"]
 
-errmax = computecoeffts[6, 25, 15, 11, "sqrt_1_2.txt"];
+errmax = computecoeffts[Sqrt, {1, 2}, 6, 25, 15, 11, "sqrt_1_2.txt"];
 errmaxfmt = MantissaExponent[errmax, 2];
 
 Print[
