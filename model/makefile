@@ -1,6 +1,6 @@
 NVCC = nvcc
 NVCCFLAGS =
-HEADERS = cuda_check.h
+HEADERS = cuda_check.hpp
 SOURCES = main.cu cuda_check.cu
 TARGET = main
 

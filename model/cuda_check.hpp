@@ -1,5 +1,5 @@
-#ifndef __CUDA_CHECK_H
-#define __CUDA_CHECK_H
+#ifndef CUDA_CHECK_HPP
+#define CUDA_CHECK_HPP
 
 #include <cuda_runtime.h>
 

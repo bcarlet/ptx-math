@@ -2,13 +2,13 @@
 #include <cstdio>
 #include <cmath>
 
-#include "cuda_check.h"
+#include "cuda_check.hpp"
 
 __global__
 static void sine(int n, float *x)
 {
     const int stride = blockDim.x * gridDim.x;
-    
+
     for (int i = blockIdx.x * blockDim.x + threadIdx.x; i < n; i += stride)
     {
         asm("sin.approx.f32 %0, %0;" : "+f"(x[i]));
@@ -21,7 +21,7 @@ int main()
     float *x;
 
     CUDA_CHECK(cudaMallocManaged(&x, x_size * sizeof(float)));
-    
+
     const float step = 0.000001f;
 
     for (int i = 0; i < x_size; i++)
@@ -38,11 +38,11 @@ int main()
     CUDA_CHECK(cudaDeviceSynchronize());
 
     float max_error = 0.0f;
-    
+
     for (int i = 0; i < x_size; i++)
     {
         const float expected = sin(i * step);
-        
+
         max_error = fmax(max_error, fabs(x[i] - expected));
     }
 
