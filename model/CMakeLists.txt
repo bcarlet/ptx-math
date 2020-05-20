@@ -4,6 +4,10 @@ project(model LANGUAGES CXX CUDA)
 
 add_executable(main
   main.cu
-  cuda_check.cu
-  cuda_check.hpp
+  cuda_util.cu
+  cuda_util.hpp
+  ptx.hpp
 )
+
+target_compile_features(main PRIVATE cxx_std_11)
+target_compile_options(main PRIVATE "$<$<CONFIG:RELEASE>:-O2>")

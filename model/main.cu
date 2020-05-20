@@ -2,16 +2,17 @@
 #include <cstdio>
 #include <cmath>
 
-#include "cuda_check.hpp"
+#include "cuda_util.hpp"
+#include "ptx.hpp"
 
 __global__
 static void sine(int n, float *x)
 {
-    const int stride = blockDim.x * gridDim.x;
+    int i, stride;
 
-    for (int i = blockIdx.x * blockDim.x + threadIdx.x; i < n; i += stride)
+    GRID_STRIDE_LOOP(i, stride, n)
     {
-        asm("sin.approx.f32 %0, %0;" : "+f"(x[i]));
+        sin_approx_f32(x + i);
     }
 }
 

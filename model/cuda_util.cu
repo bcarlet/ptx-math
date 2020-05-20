@@ -1,4 +1,4 @@
-#include "cuda_check.hpp"
+#include "cuda_util.hpp"
 
 #include <cstdlib>
 #include <cstdio>

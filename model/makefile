@@ -1,7 +1,7 @@
 NVCC = nvcc
-NVCCFLAGS =
-HEADERS = cuda_check.hpp
-SOURCES = main.cu cuda_check.cu
+NVCCFLAGS = -std=c++11 -O2
+HEADERS = *.hpp
+SOURCES = $(wildcard *.cu)
 TARGET = main
 
 .PHONY: clean check
