@@ -25,9 +25,7 @@ template<ptx_instruction I>
 __global__
 static void map(int n, float *x)
 {
-    int i, stride;
-
-    GRID_STRIDE_LOOP(i, stride, n)
+    GRID_STRIDE_LOOP(i, n)
     {
         ptx_asm<I>::exec(x + i);
     }

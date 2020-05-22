@@ -6,7 +6,7 @@
 /**
  * Sets up a grid-stride loop for use in a CUDA kernel.
  */
-#define GRID_STRIDE_LOOP(indexVar, strideVar, n) for (indexVar = blockIdx.x * blockDim.x + threadIdx.x, strideVar = blockDim.x * gridDim.x; indexVar < n; indexVar += strideVar)
+#define GRID_STRIDE_LOOP(indexName, n) for (int indexName = blockIdx.x * blockDim.x + threadIdx.x; indexName < n; indexName += blockDim.x * gridDim.x)
 
 /**
  * Convenience macro for CUDA error checking.
