@@ -7,6 +7,7 @@ add_executable(main
   cuda_util.cu
   cuda_util.hpp
   ptx.hpp
+  stopwatch.hpp
 )
 
 target_compile_features(main PRIVATE cxx_std_11)
