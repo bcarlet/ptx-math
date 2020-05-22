@@ -3,34 +3,64 @@
 
 #include <cuda_runtime.h>
 
-__device__
-inline void rcp_approx_f32(float *x)
+enum class ptx_instruction
 {
-    asm("rcp.approx.f32 %0, %0;" : "+f"(*x));
-}
+    RCP_APPROX_F32,
+    SQRT_APPROX_F32,
+    RSQRT_APPROX_F32,
+    SIN_APPROX_F32,
+    COS_APPROX_F32
+};
 
-__device__
-inline void sqrt_approx_f32(float *x)
+template<ptx_instruction I>
+struct ptx_asm
 {
-    asm("sqrt.approx.f32 %0, %0;" : "+f"(*x));
-}
+    __device__ __forceinline__ static void exec(float *x);
+};
 
-__device__
-inline void rsqrt_approx_f32(float *x)
+template<>
+struct ptx_asm<ptx_instruction::RCP_APPROX_F32>
 {
-    asm("rsqrt.approx.f32 %0, %0;" : "+f"(*x));
-}
+    __device__ __forceinline__ static void exec(float *x)
+    {
+        asm("rcp.approx.f32 %0, %0;" : "+f"(*x));
+    }
+};
 
-__device__
-inline void sin_approx_f32(float *x)
+template<>
+struct ptx_asm<ptx_instruction::SQRT_APPROX_F32>
 {
-    asm("sin.approx.f32 %0, %0;" : "+f"(*x));
-}
+    __device__ __forceinline__ static void exec(float *x)
+    {
+        asm("sqrt.approx.f32 %0, %0;" : "+f"(*x));
+    }
+};
 
-__device__
-inline void cos_approx_f32(float *x)
+template<>
+struct ptx_asm<ptx_instruction::RSQRT_APPROX_F32>
 {
-    asm("cos.approx.f32 %0, %0;" : "+f"(*x));
-}
+    __device__ __forceinline__ static void exec(float *x)
+    {
+        asm("rsqrt.approx.f32 %0, %0;" : "+f"(*x));
+    }
+};
+
+template<>
+struct ptx_asm<ptx_instruction::SIN_APPROX_F32>
+{
+    __device__ __forceinline__ static void exec(float *x)
+    {
+        asm("sin.approx.f32 %0, %0;" : "+f"(*x));
+    }
+};
+
+template<>
+struct ptx_asm<ptx_instruction::COS_APPROX_F32>
+{
+    __device__ __forceinline__ static void exec(float *x)
+    {
+        asm("cos.approx.f32 %0, %0;" : "+f"(*x));
+    }
+};
 
 #endif

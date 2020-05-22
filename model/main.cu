@@ -5,14 +5,15 @@
 #include "cuda_util.hpp"
 #include "ptx.hpp"
 
+template<ptx_instruction I>
 __global__
-static void sine(int n, float *x)
+static void map(int n, float *x)
 {
     int i, stride;
 
     GRID_STRIDE_LOOP(i, stride, n)
     {
-        sin_approx_f32(x + i);
+        ptx_asm<I>::exec(x + i);
     }
 }
 
@@ -33,7 +34,7 @@ int main()
     const int block_dim = 256;
     const int grid_dim = (x_size + block_dim - 1) / block_dim;
 
-    sine<<<grid_dim, block_dim>>>(x_size, x);
+    map<ptx_instruction::SIN_APPROX_F32><<<grid_dim, block_dim>>>(x_size, x);
     CUDA_CHECK(cudaPeekAtLastError());
 
     CUDA_CHECK(cudaDeviceSynchronize());
