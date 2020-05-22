@@ -3,11 +3,12 @@
 
 #include <chrono>
 
-template<class Duration = std::chrono::steady_clock::duration>
+template<class Rep, class Period = std::ratio<1>>
 class stopwatch
 {
 public:
     using clock = std::chrono::steady_clock;
+    using duration = std::chrono::duration<Rep, Period>;
 
     /**
      * Construct and start a stopwatch.
@@ -28,16 +29,16 @@ public:
     /**
      * Get the time elapsed since the stopwatch's creation or last reset.
      */
-    typename Duration::rep elapsed() const
+    Rep elapsed() const
     {
-        const std::chrono::time_point<clock> end = clock::now();
-        const Duration diff = std::chrono::duration_cast<Duration>(end - begin);
+        const clock::time_point end = clock::now();
+        const duration diff = std::chrono::duration_cast<duration>(end - begin);
 
         return diff.count();
     }
 
 private:
-    std::chrono::time_point<clock> begin;
+    clock::time_point begin;
 };
 
 #endif
