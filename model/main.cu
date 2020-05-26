@@ -12,6 +12,8 @@ static_assert(CHAR_BIT == 8, "CHAR_BIT != 8");
 static_assert(sizeof(float) == 4, "sizeof(float) != 4");
 static_assert(!float_limits::traps, "float generates traps");
 
+#include "util/stopwatch.hpp"
+#include "util/running_stats.hpp"
 #include "cuda_util.hpp"
 #include "ptx.hpp"
 
@@ -42,9 +44,23 @@ static void initialize_batch(uint32_t batch, float *x)
     }
 }
 
-static float compare_batch(uint32_t batch, const float *x, float (*f)(float))
+struct comp_stats
 {
-    float max_error = 0.0f;
+    void accumulate(float a, float b)
+    {
+        if (isfinite(a) && isfinite(b))
+            error.accumulate(fabs((double)b - a));
+
+        if (memcmp(&a, &b, sizeof(float)) == 0)
+            num_exact++;
+    }
+
+    running_stats<double> error;
+    unsigned long long num_exact = 0u;
+};
+
+static void compare_batch(uint32_t batch, const float *x, float (*f)(float), comp_stats &stats)
+{
     uint32_t val = batch * BATCH_SIZE;
 
     for (uint32_t i = 0; i < BATCH_SIZE; i++)
@@ -52,12 +68,10 @@ static float compare_batch(uint32_t batch, const float *x, float (*f)(float))
         float fval;
         memcpy(&fval, &val, 4u);
 
-        max_error = fmax(max_error, fabs(x[i] - f(fval)));
+        stats.accumulate(x[i], f(fval));
 
         val++;
     }
-
-    return max_error;
 }
 
 int main()
@@ -65,21 +79,31 @@ int main()
     float *x;
     CUDA_CHECK(cudaMallocManaged(&x, BATCH_SIZE * sizeof(float)));
 
-    float max_error = 0.0f;
+    stopwatch<double, std::milli> timer;
+    running_stats<double> time;
+    comp_stats stats;
 
     for (uint32_t batch = 0; batch < BATCH_COUNT; batch++)
     {
+        if (batch % (BATCH_COUNT / 8) == 0)
+            printf("On batch: %u\n", batch);
+
         initialize_batch(batch, x);
+
+        timer.reset();
 
         map<ptx_instruction::SIN_APPROX_F32><<<GRID_DIM, BLOCK_DIM>>>(BATCH_SIZE, x);
         CUDA_CHECK(cudaPeekAtLastError());
 
         CUDA_CHECK(cudaDeviceSynchronize());
 
-        max_error = fmax(max_error, compare_batch(batch, x, sinf));
+        time.accumulate(timer.elapsed());
+        compare_batch(batch, x, sinf, stats);
     }
 
-    printf("Max error: %.10f\n", max_error);
+    printf("GPU batch time (ms): min=%f, max=%f, avg=%f\n", time.min, time.max, time.average());
+    printf("Finite error: max=%.15f, avg=%.15f\n", stats.error.max, stats.error.average());
+    printf("Bit-exact: %llu\n", stats.num_exact);
 
     CUDA_CHECK(cudaFree(x));
 
