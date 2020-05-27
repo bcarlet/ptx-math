@@ -1,9 +1,8 @@
 #include "cuda_util.hpp"
 
 #include <cstdlib>
-#include <cstdio>
 
-void print_devices()
+void print_devices(FILE *stream)
 {
     int device_count;
     CUDA_CHECK(cudaGetDeviceCount(&device_count));
@@ -14,7 +13,7 @@ void print_devices()
     {
         CUDA_CHECK(cudaGetDeviceProperties(&props, device));
 
-        printf("Device %d: %s\n", device, props.name);
+        fprintf(stream, "Device %d: %s\n", device, props.name);
     }
 }
 

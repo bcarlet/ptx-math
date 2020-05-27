@@ -2,6 +2,7 @@
 #define CUDA_UTIL_HPP
 
 #include <cuda_runtime.h>
+#include <cstdio>
 
 /**
  * Sets up a grid-stride loop for use in a CUDA kernel.
@@ -16,7 +17,7 @@
 /**
  * Print the available compute-capable devices.
  */
-void print_devices();
+void print_devices(FILE *stream = stdout);
 
 /**
  * If code is not cudaSuccess, print an error message and terminate the program.
