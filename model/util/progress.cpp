@@ -19,15 +19,3 @@ void print_progress_bar(float progress, const char *prefix)
     fprintf(stdout, "[%d%%]", percentage);
     fflush(stdout);
 }
-
-void finish_progress_bar(const char *prefix)
-{
-    fprintf(stdout, "\r%s", prefix);
-
-    for (int i = 0; i < PROGRESS_BAR_WIDTH; i++)
-    {
-        fputc('#', stdout);
-    }
-
-    fputs("[100%]\n", stdout);
-}

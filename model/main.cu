@@ -12,8 +12,9 @@ static_assert(CHAR_BIT == 8, "CHAR_BIT != 8");
 static_assert(sizeof(float) == 4, "sizeof(float) != 4");
 static_assert(!float_limits::traps, "float generates traps");
 
-#include "util/stopwatch.hpp"
-#include "util/running_stats.hpp"
+#include "model/model.h"
+#include "util/progress.hpp"
+#include "util/tally.hpp"
 #include "cuda_util.hpp"
 #include "ptx.hpp"
 
@@ -55,7 +56,7 @@ struct comp_stats
             num_exact++;
     }
 
-    running_stats<double> error;
+    tally<double> error;
     unsigned long long num_exact = 0u;
 };
 
@@ -76,32 +77,35 @@ static void compare_batch(uint32_t batch, const float *x, float (*f)(float), com
 
 int main()
 {
+    puts("Detecting devices...");
+    print_devices();
+
+    int device;
+    CUDA_CHECK(cudaGetDevice(&device));
+
+    printf("Using device %d.\nRunning simulation...\n", device);
+
     float *x;
     CUDA_CHECK(cudaMallocManaged(&x, BATCH_SIZE * sizeof(float)));
 
-    stopwatch<double, std::milli> timer;
-    running_stats<double> time;
     comp_stats stats;
 
     for (uint32_t batch = 0; batch < BATCH_COUNT; batch++)
     {
-        if (batch % (BATCH_COUNT / 8) == 0)
-            printf("On batch: %u\n", batch);
-
+        print_progress_bar((float)batch / BATCH_COUNT);
         initialize_batch(batch, x);
 
-        timer.reset();
-
-        map<ptx_instruction::SIN_APPROX_F32><<<GRID_DIM, BLOCK_DIM>>>(BATCH_SIZE, x);
+        map<ptx_instruction::RCP_APPROX_F32><<<GRID_DIM, BLOCK_DIM>>>(BATCH_SIZE, x);
         CUDA_CHECK(cudaPeekAtLastError());
 
         CUDA_CHECK(cudaDeviceSynchronize());
 
-        time.accumulate(timer.elapsed());
-        compare_batch(batch, x, sinf, stats);
+        compare_batch(batch, x, model_rcp, stats);
     }
 
-    printf("GPU batch time (ms): min=%f, max=%f, avg=%f\n", time.min, time.max, time.average());
+    print_progress_bar(1.0f);
+    putchar('\n');
+
     printf("Finite error: max=%.15f, avg=%.15f\n", stats.error.max, stats.error.average());
     printf("Bit-exact: %llu\n", stats.num_exact);
 

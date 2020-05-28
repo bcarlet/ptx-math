@@ -1,5 +1,5 @@
-#ifndef RUNNING_STATS_HPP
-#define RUNNING_STATS_HPP
+#ifndef TALLY_HPP
+#define TALLY_HPP
 
 #include <algorithm>
 #include <limits>
@@ -23,7 +23,7 @@ private:
 };
 
 template<class T, class AvgType = double>
-class running_stats
+class tally
 {
 public:
     void accumulate(T val)
