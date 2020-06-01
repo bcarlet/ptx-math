@@ -22,16 +22,12 @@ float model_rcp(float x)
 #endif
     }
 
-    // x = fraction * 2^exp
-    // fraction in (-1, -0.5] U [0.5, 1)
-    int exp;
-    float fraction = frexpf(x, &exp);
+    // x = frac * 2^exp
+    // frac in (-2, -1] U [1, 2)
+    const int exp = ilogbf(x);
+    const float frac = ldexpf(x, -exp);
 
-    // scale fraction to (-2, -1] U [1, 2)
-    exp -= 1;
-    fraction *= 2;
-
-    float r = 1.0f / fraction;
+    float r = 1.0f / frac;
 
     return ldexpf(r, -exp);
 }
