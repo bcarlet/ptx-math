@@ -9,7 +9,7 @@
  */
 #define GRID_STRIDE_LOOP(indexName, n) \
     for (int indexName = blockIdx.x * blockDim.x + threadIdx.x; \
-         indexName < n; \
+         indexName < (n); \
          indexName += blockDim.x * gridDim.x)
 
 /**
