@@ -6,10 +6,11 @@ writecoeffts::usage = "writecoeffts[channel, c0, c1, c2, t, p, q] writes the coe
 
 Begin["Private`"]
 
-digitstring::usage = "digitstring[n, d] converts the number n to a binary digit string with exactly d digits after the binary point."
-fixedhexstring::usage = "fixedhexstring[n, d] converts the number n to a hexadecimal digit string with the precision of d fractional binary digits."
+binstring::usage = "binstring[n, d] converts the number n to a binary digit string with exactly d digits after the binary point."
+hexstring::usage = "hexstring[n, d] converts the number n to a hexadecimal digit string with the precision of d fractional binary digits."
+fixedpointstring::usage = "fixedpointstring[n, d] converts the number n to a fixed-point hexadecimal digit string with the precision of d fractional binary digits."
 
-digitstring[n_, d_] :=
+binstring[n_, d_] :=
 	StringJoin[
 		If[n < 0, "-", ""],
 		Map[ToString, IntegerDigits[IntegerPart[n], 2]],
@@ -17,7 +18,7 @@ digitstring[n_, d_] :=
 		Map[ToString, RealDigits[FractionalPart[n], 2, d, -1][[1]]]
 	]
 
-fixedhexstring[n_, d_] :=
+hexstring[n_, d_] :=
 	StringJoin[
 		If[n < 0, "-", ""],
 		IntegerString[IntegerPart[n], 16],
@@ -28,8 +29,11 @@ fixedhexstring[n_, d_] :=
 		]
 	]
 
+fixedpointstring[n_, d_] :=
+	If[n < 0, "-", ""] <> IntegerString[IntegerPart[n*2^d], 16]
+
 writecoeffts[channel_, c0_, c1_, c2_, t_, p_, q_] :=
-	WriteString[channel, digitstring[c0, t], ",", digitstring[c1, p], ",", digitstring[c2, q], "\n"];
+	WriteString[channel, binstring[c0, t], ",", binstring[c1, p], ",", binstring[c2, q], "\n"];
 
 End[]
 
