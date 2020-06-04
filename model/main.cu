@@ -1,7 +1,6 @@
 #include <cuda_runtime.h>
 #include <cstdio>
 #include <cstdint>
-#include <cmath>
 #include <cstring>
 #include <limits>
 
@@ -14,7 +13,6 @@ static_assert(!float_limits::traps, "float generates traps");
 
 #include "model/model.h"
 #include "util/progress.hpp"
-#include "util/tally.hpp"
 #include "cuda_util.hpp"
 #include "ptx.hpp"
 
@@ -45,23 +43,9 @@ static void initialize_batch(uint32_t batch, float *x)
     }
 }
 
-struct comp_stats
+static uint32_t compare_batch(uint32_t batch, const float *x, float (*f)(float))
 {
-    void accumulate(float a, float b)
-    {
-        if (isfinite(a) && isfinite(b))
-            error.accumulate(fabs((double)b - a));
-
-        if (memcmp(&a, &b, sizeof(float)) == 0)
-            num_exact++;
-    }
-
-    tally<double> error;
-    unsigned long long num_exact = 0u;
-};
-
-static void compare_batch(uint32_t batch, const float *x, float (*f)(float), comp_stats &stats)
-{
+    uint32_t num_exact = 0;
     uint32_t val = batch * BATCH_SIZE;
 
     for (uint32_t i = 0; i < BATCH_SIZE; i++)
@@ -69,10 +53,15 @@ static void compare_batch(uint32_t batch, const float *x, float (*f)(float), com
         float fval;
         memcpy(&fval, &val, 4u);
 
-        stats.accumulate(x[i], f(fval));
+        const float cmp = f(fval);
+
+        if (memcmp(x + i, &cmp, 4u) == 0)
+            num_exact++;
 
         val++;
     }
+
+    return num_exact;
 }
 
 int main()
@@ -88,7 +77,7 @@ int main()
     float *x;
     CUDA_CHECK(cudaMallocManaged(&x, BATCH_SIZE * sizeof(float)));
 
-    comp_stats stats;
+    uint64_t num_exact = 0;
 
     for (uint32_t batch = 0; batch < BATCH_COUNT; batch++)
     {
@@ -100,14 +89,13 @@ int main()
 
         CUDA_CHECK(cudaDeviceSynchronize());
 
-        compare_batch(batch, x, model_rcp, stats);
+        num_exact += compare_batch(batch, x, model_rcp);
     }
 
     print_progress_bar(1.0f);
     putchar('\n');
 
-    printf("Finite error: max=%.15f, avg=%.15f\n", stats.error.max, stats.error.average());
-    printf("Bit-exact: %llu\n", stats.num_exact);
+    printf("Bit-exact: %llu\n", num_exact);
 
     CUDA_CHECK(cudaFree(x));
 
