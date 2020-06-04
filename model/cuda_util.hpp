@@ -2,7 +2,6 @@
 #define CUDA_UTIL_HPP
 
 #include <cuda_runtime.h>
-#include <cstdio>
 
 /**
  * Sets up a grid-stride loop for use in a CUDA kernel.
@@ -15,16 +14,16 @@
 /**
  * Convenience macro for CUDA error checking.
  */
-#define CUDA_CHECK(errcode) cuda_err_check((errcode), __FILE__, __LINE__)
+#define CUDA_CHECK(errcode) cuda_error_check((errcode), __FILE__, __LINE__)
 
 /**
  * Print the available compute-capable devices.
  */
-void print_devices(FILE *stream = stdout);
+void print_devices();
 
 /**
  * If code is not cudaSuccess, print an error message and terminate the program.
  */
-void cuda_err_check(cudaError_t code, const char *file, int line);
+void cuda_error_check(cudaError_t code, const char *file, int line);
 
 #endif

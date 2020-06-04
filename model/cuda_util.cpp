@@ -1,8 +1,9 @@
 #include "cuda_util.hpp"
 
 #include <cstdlib>
+#include <cstdio>
 
-void print_devices(FILE *stream)
+void print_devices()
 {
     int device_count;
     CUDA_CHECK(cudaGetDeviceCount(&device_count));
@@ -13,11 +14,12 @@ void print_devices(FILE *stream)
     {
         CUDA_CHECK(cudaGetDeviceProperties(&props, device));
 
-        fprintf(stream, "Device %d: %s\n", device, props.name);
+        fprintf(stdout, "Device %d: %s (sm_%d%d)\n",
+                device, props.name, props.major, props.minor);
     }
 }
 
-void cuda_err_check(cudaError_t code, const char *file, int line)
+void cuda_error_check(cudaError_t code, const char *file, int line)
 {
     if (code != cudaSuccess)
     {
