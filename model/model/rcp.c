@@ -11,7 +11,7 @@
 
 static const uint32_t table[128][3];
 
-float model_rcp(const float x)
+float model_rcp(float x)
 {
     switch (fpclassify(x))
     {

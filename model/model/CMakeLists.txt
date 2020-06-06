@@ -2,6 +2,7 @@ target_sources(main PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/model.h
   ${CMAKE_CURRENT_SOURCE_DIR}/fpassert.h
   ${CMAKE_CURRENT_SOURCE_DIR}/fpmanip.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/nan.h
   ${CMAKE_CURRENT_SOURCE_DIR}/rcp.c
   ${CMAKE_CURRENT_SOURCE_DIR}/sqrt.c
   ${CMAKE_CURRENT_SOURCE_DIR}/rsqrt.c
