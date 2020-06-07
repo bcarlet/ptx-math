@@ -1,6 +1,15 @@
-target_sources(main PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/stopwatch.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/tally.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/progress.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/progress.hpp
+add_library(util STATIC
+  cuda.cu
+  cuda.hpp
+  progress.cpp
+  progress.hpp
+  stopwatch.hpp
+  tally.hpp
+)
+
+target_compile_features(util PUBLIC cxx_std_11)
+
+set_target_properties(util PROPERTIES
+  CXX_EXTENSIONS OFF
+  CMAKE_CUDA_STANDARD 11
 )

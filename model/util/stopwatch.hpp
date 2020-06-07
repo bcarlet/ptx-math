@@ -1,5 +1,5 @@
-#ifndef STOPWATCH_HPP
-#define STOPWATCH_HPP
+#ifndef UTIL_STOPWATCH_HPP
+#define UTIL_STOPWATCH_HPP
 
 #include <chrono>
 

@@ -1,15 +1,18 @@
-target_sources(main PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/model.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/fpassert.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/fpmanip.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/fpmanip.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/nan.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/nan.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/rcp.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/sqrt.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/rsqrt.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/sin.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/cos.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/lg2.c
-  ${CMAKE_CURRENT_SOURCE_DIR}/ex2.c
+add_library(model STATIC
+  model.h
+  fpassert.h
+  fpmanip.h
+  fpmanip.c
+  nan.h
+  nan.c
+  rcp.c
+  sqrt.c
+  rsqrt.c
+  sin.c
+  cos.c
+  lg2.c
+  ex2.c
 )
+
+target_compile_features(model PUBLIC c_std_11)
+set_target_properties(model PROPERTIES C_EXTENSIONS OFF)

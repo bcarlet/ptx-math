@@ -1,5 +1,5 @@
-#ifndef TALLY_HPP
-#define TALLY_HPP
+#ifndef UTIL_TALLY_HPP
+#define UTIL_TALLY_HPP
 
 #include <algorithm>
 #include <limits>
