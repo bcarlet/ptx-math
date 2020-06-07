@@ -4,7 +4,7 @@ project(model LANGUAGES C CXX CUDA)
 
 add_executable(main
   main.cu
-  cuda_util.cpp
+  cuda_util.cu
   cuda_util.hpp
   ptx.hpp
 )
