@@ -1,5 +1,5 @@
 #include "model.h"
-#include "nan.h"
+#include "common/nan.h"
 
 #include <math.h>
 

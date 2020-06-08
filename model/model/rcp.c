@@ -1,6 +1,6 @@
 #include "model.h"
-#include "fpmanip.h"
-#include "nan.h"
+#include "common/fpmanip.h"
+#include "common/nan.h"
 
 #include <math.h>
 
