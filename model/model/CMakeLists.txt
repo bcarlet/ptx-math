@@ -10,6 +10,7 @@ add_library(model STATIC
 )
 
 add_subdirectory(common)
+add_subdirectory(tables)
 
 target_compile_features(model PUBLIC c_std_11)
 set_target_properties(model PROPERTIES C_EXTENSIONS OFF)
