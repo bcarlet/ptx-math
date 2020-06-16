@@ -4,9 +4,8 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "bitmask.h"
 #include "fpassert.h"
-
-#define MASK_U32(numbits) ((UINT32_C(1) << (numbits)) - 1u)
 
 #define UPPER_SIGNIFICAND(x, m) (((x) >> (23 - (m))) & MASK_U32(m))
 
