@@ -52,7 +52,7 @@ float model_rcp(float x)
     const uint32_t r_sig = (sum >> (56 - 23)) & MASK_U32(23);
     const uint32_t r_sign = signbit(x) ? 1u : 0u;
 
-    const uint32_t r_bits = (r_sign << 31) | (r_exp << 23) | r_sig;
+    const uint32_t r_bits = FP_FORMAT(r_sign, r_exp, r_sig);
 
     const float r = reinterpret_uint(r_bits);
 

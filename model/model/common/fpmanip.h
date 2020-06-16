@@ -11,6 +11,8 @@
 
 #define LOWER_SIGNIFICAND(x, m) ((x) & MASK_U32(23 - (m)))
 
+#define FP_FORMAT(sign, exp, frac) (((sign) << 31) | ((exp) << 23) | (frac))
+
 inline uint32_t reinterpret_float(float x)
 {
     uint32_t i;
