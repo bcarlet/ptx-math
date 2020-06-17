@@ -1,5 +1,6 @@
 add_library(model STATIC
   model.h
+  params.h
   rcp.c
   sqrt.c
   rsqrt.c
