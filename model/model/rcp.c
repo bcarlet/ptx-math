@@ -21,6 +21,8 @@ float model_rcp(float x)
 
 float parameterized_rcp(float x, const m_params *params)
 {
+    int x_log2;
+
     switch (fpclassify(x))
     {
     case FP_NAN:
@@ -34,8 +36,13 @@ float parameterized_rcp(float x, const m_params *params)
         return copysignf(INFINITY, x);
 #else
     case FP_SUBNORMAL:
-        return 1.0f / x;    // can't handle subnormals explicitly yet
+        x_log2 = ilogbf(x);
+        x = ldexpf(x, -x_log2);     // normalize x
+        break;
 #endif
+    case FP_NORMAL:
+        x_log2 = ilogbf(x);
+        break;
     }
 
     const uint32_t x_bits = reinterpret_float(x);
@@ -72,5 +79,5 @@ float parameterized_rcp(float x, const m_params *params)
 
     const float r = reinterpret_uint(r_bits);
 
-    return ldexpf(r, -ilogbf(x));
+    return ldexpf(r, -x_log2);
 }
