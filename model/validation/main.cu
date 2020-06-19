@@ -14,6 +14,7 @@ static_assert(!float_limits::traps, "float generates traps");
 #include "model/model.h"
 #include "util/progress.hpp"
 #include "util/cuda.hpp"
+#include "util/devices.hpp"
 #include "ptx/ptx.hpp"
 
 static constexpr uint32_t BATCH_SIZE = UINT32_C(1) << 20;
