@@ -11,7 +11,7 @@
 static const m_params model_params =
 {
     .table = rcp_table,
-    .bias = UINT64_C(0x8000000000000000)
+    .bias = UINT64_C(0x67e7ffffffffffff)
 };
 
 float model_rcp(float x)
