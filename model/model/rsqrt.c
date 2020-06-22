@@ -10,8 +10,7 @@ float model_rsqrt(float x)
     case FP_NAN:
         return canonical_nan();
     case FP_INFINITE:
-        if (signbit(x)) return canonical_nan();
-        else return 0.0f;
+        return signbit(x) ? canonical_nan() : 0.0f;
     case FP_ZERO:
         return copysignf(INFINITY, x);
 #ifdef PTX_FTZ

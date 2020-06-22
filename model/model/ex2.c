@@ -10,8 +10,7 @@ float model_ex2(float x)
     case FP_NAN:
         return canonical_nan();
     case FP_INFINITE:
-        if (signbit(x)) return 0.0f;
-        else return INFINITY;
+        return signbit(x) ? 0.0f : INFINITY;
     case FP_ZERO:
         return 1.0f;
 #ifdef PTX_FTZ
