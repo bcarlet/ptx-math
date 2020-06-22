@@ -16,10 +16,24 @@ float model_sqrt(float x)
 #ifdef PTX_FTZ
     case FP_SUBNORMAL:
         return copysignf(0.0f, x);
+#else
+    case FP_SUBNORMAL:
+        return sqrtf(x);
 #endif
     }
 
     if (signbit(x)) return canonical_nan();
 
-    return sqrtf(x);
+    int x_log2 = ilogbf(x);
+    float frac = ldexpf(x, -x_log2);
+
+    if (x_log2 % 2 != 0)
+    {
+        x_log2 -= 1;
+        frac *= 2.0f;
+    }
+
+    const float r = sqrtf(frac);
+
+    return ldexpf(r, x_log2 / 2);
 }
