@@ -1,4 +1,5 @@
 #include "testing.hpp"
+#include "batching.hpp"
 
 counters test(const interval &test_space, float *gpubuf, float *modelbuf, uint32_t bufsize,
               const mapf_t &gpu, const syncf_t &gpusync, const mapf_t &model)

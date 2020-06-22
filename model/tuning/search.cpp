@@ -1,5 +1,6 @@
 #include "search.hpp"
 #include "binsearch.hpp"
+#include "testing.hpp"
 
 static int cmp(uint64_t x, uint64_t y)
 {
@@ -8,7 +9,7 @@ static int cmp(uint64_t x, uint64_t y)
 
 counters bias_search(const interval &test_space, float *gpubuf, float *modelbuf,
                      uint32_t bufsize, const mapf_t &gpu, const syncf_t &gpusync,
-                     const genf_t &model_gen, uint64_t &bias)
+                     const genf_t<uint64_t> &model_gen, uint64_t &bias)
 {
     counters cnt = {};
 
