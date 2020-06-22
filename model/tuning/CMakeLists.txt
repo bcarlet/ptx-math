@@ -1,4 +1,6 @@
 add_library(tuning STATIC
+  interval.hpp
+  fntypes.hpp
   batching.cpp
   batching.hpp
   binsearch.cpp
