@@ -1,5 +1,7 @@
 add_library(model STATIC
   model.h
+  tuning.h
+  params.h
   rcp.c
   sqrt.c
   rsqrt.c
