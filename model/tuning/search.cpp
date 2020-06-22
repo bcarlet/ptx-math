@@ -1,5 +1,4 @@
 #include "search.hpp"
-
 #include "binsearch.hpp"
 
 static int cmp(uint64_t x, uint64_t y)
