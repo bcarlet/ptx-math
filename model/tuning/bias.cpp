@@ -1,6 +1,6 @@
-#include "search.hpp"
-#include "binsearch.hpp"
-#include "testing.hpp"
+#include "bias.hpp"
+#include "algorithm/binsearch.hpp"
+#include "base/testing.hpp"
 
 static int cmp(uint64_t x, uint64_t y)
 {
