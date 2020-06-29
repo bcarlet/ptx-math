@@ -11,3 +11,6 @@ trim_trailing_whitespace = true
 
 [{makefile,Makefile}]
 indent_style = tab
+
+[CMakeLists.txt]
+indent_size = 2
