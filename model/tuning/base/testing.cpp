@@ -1,11 +1,10 @@
 #include "testing.hpp"
 #include "batching.hpp"
 
-counters test(const interval &test_space, float *gpubuf, float *modelbuf, uint32_t bufsize,
-              const mapf_t &gpu, const syncf_t &gpusync, const mapf_t &model)
+void test(const interval &test_space, float *gpubuf, float *modelbuf, uint32_t bufsize,
+          const mapf_t &gpu, const syncf_t &gpusync, const mapf_t &model, counters &results)
 {
     float start = test_space.least;
-    counters cnt = {};
 
     while (true)
     {
@@ -19,8 +18,6 @@ counters test(const interval &test_space, float *gpubuf, float *modelbuf, uint32
 
         gpusync();
 
-        cnt.accumulate(size, modelbuf, gpubuf);
+        results.accumulate(size, gpubuf, modelbuf);
     }
-
-    return cnt;
 }

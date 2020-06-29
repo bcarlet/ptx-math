@@ -2,13 +2,14 @@
 #define COUNTERS_HPP
 
 #include <cstddef>
-#include <cstdint>
 
-struct counters
+class counters
 {
-    void accumulate(std::size_t n, const float *lhs, const float *rhs);
+public:
+    virtual void accumulate(std::size_t n, const float *gpu, const float *model) = 0;
 
-    uint64_t smaller, larger, exact, total;
+protected:
+    ~counters() = default;
 };
 
 #endif

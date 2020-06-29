@@ -1,4 +1,6 @@
 add_library(tuning STATIC
+  basic_counters.cpp
+  basic_counters.hpp
   bias.cpp
   bias.hpp
 )
