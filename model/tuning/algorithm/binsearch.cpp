@@ -18,11 +18,23 @@ bs_state bin_search(uint64_t l, uint64_t r, uint64_t &test)
 bs_state bin_search(uint64_t &l, uint64_t &r, uint64_t &test, int test_cmp)
 {
     if (test_cmp < 0)
-        l = test + 1u;
+    {
+        if (test == UINT64_MAX)
+            return bs_state::FAIL;
+        else
+            l = test + 1u;
+    }
     else if (test_cmp > 0)
-        r = test - 1u;
+    {
+        if (test == 0u)
+            return bs_state::FAIL;
+        else
+            r = test - 1u;
+    }
     else
+    {
         return bs_state::SUCCESS;
+    }
 
     if (l > r)
         return bs_state::FAIL;
