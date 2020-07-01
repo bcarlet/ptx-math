@@ -12,21 +12,23 @@ bias_results bias_search(const interval &test_space, float *gpubuf, float *model
                          const genf_t<uint64_t> &model_gen)
 {
     bias_results results;
-    basic_counters &count = results.count;
+
+    uint64_t &bias = results.first;
+    basic_counters &count = results.second;
 
     uint64_t lower = 0;
     uint64_t upper = UINT64_MAX;
 
-    bs_state state = bin_search(lower, upper, results.bias);
+    bs_state state = bin_search(lower, upper, bias);
 
     while (state == bs_state::CONTINUE)
     {
         count.clear();
-        test(test_space, gpubuf, modelbuf, bufsize, gpu, gpusync, model_gen(results.bias), count);
+        test(test_space, gpubuf, modelbuf, bufsize, gpu, gpusync, model_gen(bias), count);
 
         const int test_cmp = cmp(count.larger, count.smaller);
 
-        state = bin_search(lower, upper, results.bias, test_cmp);
+        state = bin_search(lower, upper, bias, test_cmp);
     }
 
     return results;
