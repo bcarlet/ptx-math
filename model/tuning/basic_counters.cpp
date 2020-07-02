@@ -12,22 +12,22 @@ void basic_counters::accumulate(std::size_t n, const float *gpu, const float *mo
             continue;
         }
 
-        const float abs_gpu = fabs(gpu[i]);
-        const float abs_model = fabs(model[i]);
+        const err_sign sign = (fabs(model[i]) < fabs(gpu[i])) ? NEGATIVE : POSITIVE;
 
-        if (abs_model < abs_gpu)
-            smaller++;
-        else
-            larger++;
+        if (last_sign != sign)
+        {
+            regions++;
+            last_sign = sign;
+        }
     }
 
     total += n;
 }
 
-void basic_counters::clear()
+void clear(basic_counters &count)
 {
-    smaller = 0;
-    larger = 0;
-    exact = 0;
-    total = 0;
+    count.exact = 0;
+    count.total = 0;
+    count.regions = 0;
+    count.last_sign = basic_counters::UNDEFINED;
 }

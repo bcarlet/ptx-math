@@ -2,11 +2,6 @@
 #include "algorithm/binsearch.hpp"
 #include "base/testing.hpp"
 
-static int cmp(uint64_t x, uint64_t y)
-{
-    return (x < y) ? -1 : (x > y);
-}
-
 bias_results bias_search(const interval &test_space, float *gpubuf, float *modelbuf,
                          uint32_t bufsize, const mapf_t &gpu, const syncf_t &gpusync,
                          const genf_t<uint64_t> &model_gen)
@@ -23,10 +18,25 @@ bias_results bias_search(const interval &test_space, float *gpubuf, float *model
 
     while (state == bs_state::CONTINUE)
     {
-        count.clear();
+        clear(count);
         test(test_space, gpubuf, modelbuf, bufsize, gpu, gpusync, model_gen(bias), count);
 
-        const int test_cmp = cmp(count.larger, count.smaller);
+        if (count.regions > 1)
+            return results;
+
+        int test_cmp;
+
+        switch (count.last_sign)
+        {
+        case basic_counters::NEGATIVE:
+            test_cmp = -1;
+            break;
+        case basic_counters::POSITIVE:
+            test_cmp = 1;
+            break;
+        default:
+            return results;
+        }
 
         state = bin_search(lower, upper, bias, test_cmp);
     }
