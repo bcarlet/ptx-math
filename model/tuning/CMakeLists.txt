@@ -3,6 +3,8 @@ add_library(tuning STATIC
   basic_counters.hpp
   bias.cpp
   bias.hpp
+  coefficients.cpp
+  coefficients.hpp
 )
 
 add_subdirectory(algorithm)
