@@ -1,23 +1,23 @@
 #include "testing.hpp"
 #include "batching.hpp"
 
-void test(const interval &test_space, float *gpubuf, float *modelbuf, uint32_t bufsize,
-          const mapf_t &gpu, const syncf_t &gpusync, const mapf_t &model, counters &results)
+void test(const interval &sub, float *gpu_buf, float *model_buf, uint32_t buf_size,
+          const mapf_t &gpu, const mapf_t &model, const syncf_t &sync, counters &results)
 {
-    float start = test_space.least;
+    float start = sub.least;
 
     while (true)
     {
-        uint32_t size = initialize_batch(test_space, start, start, bufsize, gpubuf, modelbuf);
+        uint32_t size = initialize_batch(sub, start, start, buf_size, gpu_buf, model_buf);
 
         if (size == 0u)
             break;
 
-        gpu(size, gpubuf);
-        model(size, modelbuf);
+        gpu(size, gpu_buf);
+        model(size, model_buf);
 
-        gpusync();
+        sync();
 
-        results.accumulate(size, gpubuf, modelbuf);
+        results.accumulate(size, gpu_buf, model_buf);
     }
 }

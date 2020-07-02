@@ -2,9 +2,8 @@
 #include "algorithm/binsearch.hpp"
 #include "base/testing.hpp"
 
-bias_results bias_search(const interval &test_space, float *gpubuf, float *modelbuf,
-                         uint32_t bufsize, const mapf_t &gpu, const syncf_t &gpusync,
-                         const genf_t<uint64_t> &model_gen)
+bias_results bias_search(const interval &sub, float *gpu_buf, float *model_buf, uint32_t buf_size,
+                         const mapf_t &gpu, const genf_t<uint64_t> &model_gen, const syncf_t &sync)
 {
     bias_results results;
 
@@ -19,7 +18,7 @@ bias_results bias_search(const interval &test_space, float *gpubuf, float *model
     while (state == bs_state::CONTINUE)
     {
         clear(count);
-        test(test_space, gpubuf, modelbuf, bufsize, gpu, gpusync, model_gen(bias), count);
+        test(sub, gpu_buf, model_buf, buf_size, gpu, model_gen(bias), sync, count);
 
         if (count.regions > 1)
             return results;

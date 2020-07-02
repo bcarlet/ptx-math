@@ -12,8 +12,7 @@
  */
 using bias_results = std::pair<uint64_t, basic_counters>;
 
-bias_results bias_search(const interval &test_space, float *gpubuf, float *modelbuf,
-                         uint32_t bufsize, const mapf_t &gpu, const syncf_t &gpusync,
-                         const genf_t<uint64_t> &model_gen);
+bias_results bias_search(const interval &sub, float *gpu_buf, float *model_buf, uint32_t buf_size,
+                         const mapf_t &gpu, const genf_t<uint64_t> &model_gen, const syncf_t &sync);
 
 #endif
