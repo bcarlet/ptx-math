@@ -11,7 +11,8 @@
 static const m_params model_params =
 {
     .table = rcp_table,
-    .bias = UINT64_C(0x67e7ffffffffffff)
+    .bias = UINT64_C(0x67e7ffffffffffff),
+    .truncation = 17
 };
 
 float model_rcp(float x)
@@ -54,7 +55,7 @@ float parameterized_rcp(float x, const m_params *params)
 
     uint64_t c0_term = c[0];
     uint64_t c1_term = c[1] * xl;   // won't exceed 32 bits
-    uint64_t c2_term = c[2] * square_approx(xl);
+    uint64_t c2_term = c[2] * square_approx(xl, params->truncation);
 
     c0_term <<= RCP_C0_TERM_ALIGNMENT;
     c1_term <<= RCP_C1_TERM_ALIGNMENT;
