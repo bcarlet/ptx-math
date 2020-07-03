@@ -11,7 +11,7 @@
 static const m_params model_params =
 {
     .table = rcp_table,
-    .bias = UINT64_C(0x67e7ffffffffffff),
+    .bias = UINT64_C(0x67e7000000000000),
     .truncation = 17
 };
 
