@@ -69,7 +69,7 @@ float parameterized_rcp(float x, const m_params *params)
 
     if (!(sum >> RCP_SUM_WEIGHT))
     {
-        r_exp -= 1;
+        r_exp -= 1u;
         sum <<= 1;
     }
 
