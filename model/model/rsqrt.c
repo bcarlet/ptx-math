@@ -11,7 +11,7 @@
 static const m_params default_params =
 {
     .table = rsqrt_table,
-    .bias = UINT64_C(0x8000000000000000),
+    .bias = UINT64_C(0x7fff800000000000),
     .truncation = 19
 };
 
@@ -59,6 +59,10 @@ float parameterized_rsqrt(float x, const m_params *params)
     {
         x_log2 -= 1;
         index += 1u << RSQRT_M;
+    }
+    else if ((x_bits & MASK_U32(23)) == 0)
+    {
+        return ldexpf(1.0f, -x_log2 / 2);
     }
 
     const uint32_t *const c = params->table[index];
