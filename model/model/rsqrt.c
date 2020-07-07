@@ -82,9 +82,7 @@ float parameterized_rsqrt(float x, const m_params *params)
     sum <<= 1;  // normalization
 
     const uint32_t r_frac = (sum >> (RSQRT_SUM_WEIGHT - 23)) & MASK_U32(23);
-    const uint32_t r_sign = signbit(x) ? 1u : 0u;
-
-    const uint32_t r_bits = FP_FORMAT(r_sign, 126u, r_frac);
+    const uint32_t r_bits = FP_FORMAT(0u, 126u, r_frac);
 
     const float r = reinterpret_uint(r_bits);
 
