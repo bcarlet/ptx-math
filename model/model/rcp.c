@@ -38,7 +38,7 @@ float parameterized_rcp(float x, const m_params *params)
 #else
     case FP_SUBNORMAL:
         x_log2 = ilogbf(x);
-        x = ldexpf(x, -x_log2);     // normalize x
+        x *= 0x1p24f;
         break;
 #endif
     case FP_NORMAL:
