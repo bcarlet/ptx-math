@@ -6,6 +6,7 @@
 #include "common/nan.h"
 #include "common/squarer.h"
 
+#include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
 
