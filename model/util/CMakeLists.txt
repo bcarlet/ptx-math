@@ -6,7 +6,6 @@ add_library(util STATIC
   progress.cpp
   progress.hpp
   stopwatch.hpp
-  tally.hpp
 )
 
 target_compile_features(util PUBLIC cxx_std_11)
