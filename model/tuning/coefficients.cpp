@@ -31,21 +31,15 @@ static void update_coeff(uint32_t &coeff, direction dir)
 }
 
 coeff_results coeff_search(const interval &sub, float *gpu_buf, float *model_buf, uint32_t buf_size,
-                           const mapf_t &gpu, const genf_t<uint64_t, const uint32_t (&)[3]> &model_gen,
-                           const syncf_t &sync, const coeff_sign (&config)[3], const uint32_t (&initial)[3])
+                           const mapf_t &gpu, const genf_t<uint64_t, const coeff_arr &> &model_gen,
+                           const syncf_t &sync, const std::array<coeff_sign, 3> &config,
+                           const coeff_arr &initial)
 {
-    coeff_results results;
+    uint64_t bias;
+    coeff_arr coeff = initial;
+    basic_counters count;
 
-    uint64_t &bias = std::get<0>(results);
-    uint32_t (&coeff)[3] = std::get<1>(results);
-    basic_counters &count = std::get<2>(results);
-
-    for (int i = 0; i < 3; i++)
-    {
-        coeff[i] = initial[i];
-    }
-
-    const auto bs_model_gen = [&coeff, &model_gen](uint64_t bias)
+    const auto bs_model_gen = [&coeff, &model_gen](uint64_t bias) -> mapf_t
     {
         return model_gen(bias, coeff);
     };
@@ -78,5 +72,5 @@ coeff_results coeff_search(const interval &sub, float *gpu_buf, float *model_buf
         clear_dirs_lt(directions, edit);
     }
 
-    return results;
+    return std::make_tuple(bias, coeff, count);
 }
