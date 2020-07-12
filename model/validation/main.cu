@@ -1,6 +1,6 @@
 #include <cuda_runtime.h>
 #include <cstdio>
-#include <cstdint>
+#include <cinttypes>
 #include <cstring>
 #include <limits>
 
@@ -96,7 +96,7 @@ int main()
     print_progress_bar(1.0f);
     putchar('\n');
 
-    printf("Bit-exact: %llu\n", num_exact);
+    printf("Bit-exact: %" PRIu64 "\n", num_exact);
 
     CUDA_CHECK(cudaFree(x));
 
