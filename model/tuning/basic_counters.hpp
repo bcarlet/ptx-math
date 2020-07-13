@@ -13,7 +13,7 @@ public:
         NEGATIVE, POSITIVE, UNDEFINED
     };
 
-    void accumulate(std::size_t n, const float *ref, const float *model) override;
+    void accumulate(std::size_t n, const float *reference, const float *model) override;
 
     uint64_t exact = 0;
     uint64_t total = 0;

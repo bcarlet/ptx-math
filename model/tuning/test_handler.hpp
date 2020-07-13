@@ -5,9 +5,9 @@
 #include "base/fntypes.hpp"
 #include "basic_counters.hpp"
 
-using testf_t = std::function<basic_counters(const mapf_t &)>;
+using test_fn = std::function<basic_counters(const map_fn &)>;
 
-testf_t make_test_handler(const interval &sub, const mapf_t &ref, const syncf_t &sync,
-                          float *ref_buf, float *model_buf, std::size_t buf_size);
+test_fn make_test_handler(const interval &sub, const map_fn &reference, const sync_fn &sync,
+                          float *reference_buf, float *model_buf, std::size_t buf_size);
 
 #endif

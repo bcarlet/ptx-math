@@ -12,6 +12,6 @@
  */
 using bias_results = std::pair<uint64_t, basic_counters>;
 
-bias_results bias_search(const testf_t &test, const genf_t<uint64_t> &model_gen);
+bias_results bias_search(const test_fn &test, const gen_fn<uint64_t> &model_gen);
 
 #endif

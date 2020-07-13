@@ -22,7 +22,7 @@ template<class T> using vec3 = std::array<T, 3>;
  */
 using coeff_results = std::tuple<uint64_t, vec3<uint32_t>, basic_counters>;
 
-coeff_results coeff_search(const testf_t &test, const genf_t<uint64_t, const vec3<uint32_t> &> &model_gen,
+coeff_results coeff_search(const test_fn &test, const gen_fn<uint64_t, const vec3<uint32_t> &> &model_gen,
                            const vec3<coeff_sign> &config, const vec3<uint32_t> &initial);
 
 #endif

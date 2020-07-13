@@ -30,14 +30,14 @@ static void update_coeff(uint32_t &coeff, direction dir)
         coeff++;
 }
 
-coeff_results coeff_search(const testf_t &test, const genf_t<uint64_t, const vec3<uint32_t> &> &model_gen,
+coeff_results coeff_search(const test_fn &test, const gen_fn<uint64_t, const vec3<uint32_t> &> &model_gen,
                            const vec3<coeff_sign> &config, const vec3<uint32_t> &initial)
 {
     uint64_t bias;
     vec3<uint32_t> coeff = initial;
     basic_counters count;
 
-    const auto bs_model_gen = [&coeff, &model_gen](uint64_t bias) -> mapf_t
+    const auto bs_model_gen = [&coeff, &model_gen](uint64_t bias) -> map_fn
     {
         return model_gen(bias, coeff);
     };

@@ -1,7 +1,7 @@
 #include "bias.hpp"
 #include "algorithm/binsearch.hpp"
 
-bias_results bias_search(const testf_t &test, const genf_t<uint64_t> &model_gen)
+bias_results bias_search(const test_fn &test, const gen_fn<uint64_t> &model_gen)
 {
     uint64_t bias;
     basic_counters count;

@@ -6,7 +6,7 @@
 class counters
 {
 public:
-    virtual void accumulate(std::size_t n, const float *ref, const float *model) = 0;
+    virtual void accumulate(std::size_t n, const float *reference, const float *model) = 0;
 
 protected:
     ~counters() = default;

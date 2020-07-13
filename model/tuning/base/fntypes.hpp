@@ -4,10 +4,10 @@
 #include <cstddef>
 #include <functional>
 
-using mapf_t = std::function<void(std::size_t, float *)>;
-using syncf_t = std::function<void()>;
+using map_fn = std::function<void(std::size_t, float *)>;
+using sync_fn = std::function<void()>;
 
 template<class... Args>
-using genf_t = std::function<mapf_t(Args...)>;
+using gen_fn = std::function<map_fn(Args...)>;
 
 #endif
