@@ -14,9 +14,9 @@ static direction get_dir(coeff_sign config, basic_counters::err_sign last)
     return (config_is_neg != last_is_neg) ? UP : DOWN;
 }
 
-static void clear_dirs_lt(direction *dirs, unsigned i)
+static void clear_dirs_lt(vec3<direction> &dirs, std::size_t i)
 {
-    for (unsigned j = 0; j < i; j++)
+    for (std::size_t j = 0; j < i; j++)
     {
         dirs[j] = UNKNOWN;
     }
@@ -30,13 +30,12 @@ static void update_coeff(uint32_t &coeff, direction dir)
         coeff++;
 }
 
-coeff_results coeff_search(const interval &sub, float *gpu_buf, float *model_buf, uint32_t buf_size,
-                           const mapf_t &gpu, const genf_t<uint64_t, const coeff_arr &> &model_gen,
-                           const syncf_t &sync, const std::array<coeff_sign, 3> &config,
-                           const coeff_arr &initial)
+coeff_results coeff_search(const interval &sub, float *ref_buf, float *model_buf, uint32_t buf_size,
+                           const mapf_t &ref, const genf_t<uint64_t, const vec3<uint32_t> &> &model_gen,
+                           const syncf_t &sync, const vec3<coeff_sign> &config, const vec3<uint32_t> &initial)
 {
     uint64_t bias;
-    coeff_arr coeff = initial;
+    vec3<uint32_t> coeff = initial;
     basic_counters count;
 
     const auto bs_model_gen = [&coeff, &model_gen](uint64_t bias) -> mapf_t
@@ -44,16 +43,16 @@ coeff_results coeff_search(const interval &sub, float *gpu_buf, float *model_buf
         return model_gen(bias, coeff);
     };
 
-    direction directions[3] = {UNKNOWN, UNKNOWN, UNKNOWN};
+    vec3<direction> directions = {UNKNOWN, UNKNOWN, UNKNOWN};
 
     while (true)
     {
-        std::tie(bias, count) = bias_search(sub, gpu_buf, model_buf, buf_size, gpu, bs_model_gen, sync);
+        std::tie(bias, count) = bias_search(sub, ref_buf, model_buf, buf_size, ref, bs_model_gen, sync);
 
         if (count.regions == 0 || count.regions > 3)
             break;
 
-        unsigned edit = static_cast<unsigned>(count.regions) - 1u;
+        std::size_t edit = count.regions - 1u;
         direction dir = get_dir(config[edit], count.last_sign);
 
         if (directions[edit] == UNKNOWN)
@@ -62,7 +61,7 @@ coeff_results coeff_search(const interval &sub, float *gpu_buf, float *model_buf
         }
         else if (directions[edit] != dir)
         {
-            if (++edit > 2)
+            if (++edit > 2u)
                 break;
 
             dir = (directions[edit] != UNKNOWN) ? directions[edit] : DOWN;  // DOWN is arbitrary
