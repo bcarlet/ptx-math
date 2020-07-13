@@ -30,7 +30,7 @@ static void update_coeff(uint32_t &coeff, direction dir)
         coeff++;
 }
 
-coeff_results coeff_search(const interval &sub, float *ref_buf, float *model_buf, uint32_t buf_size,
+coeff_results coeff_search(const interval &sub, float *ref_buf, float *model_buf, std::size_t buf_size,
                            const mapf_t &ref, const genf_t<uint64_t, const vec3<uint32_t> &> &model_gen,
                            const syncf_t &sync, const vec3<coeff_sign> &config, const vec3<uint32_t> &initial)
 {

@@ -2,7 +2,7 @@
 #include "algorithm/binsearch.hpp"
 #include "base/testing.hpp"
 
-bias_results bias_search(const interval &sub, float *ref_buf, float *model_buf, uint32_t buf_size,
+bias_results bias_search(const interval &sub, float *ref_buf, float *model_buf, std::size_t buf_size,
                          const mapf_t &ref, const genf_t<uint64_t> &model_gen, const syncf_t &sync)
 {
     uint64_t bias;
