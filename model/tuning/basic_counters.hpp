@@ -21,6 +21,4 @@ public:
     err_sign last_sign = UNDEFINED;
 };
 
-void clear(basic_counters &count);
-
 #endif

@@ -30,9 +30,8 @@ static void update_coeff(uint32_t &coeff, direction dir)
         coeff++;
 }
 
-coeff_results coeff_search(const interval &sub, float *ref_buf, float *model_buf, std::size_t buf_size,
-                           const mapf_t &ref, const genf_t<uint64_t, const vec3<uint32_t> &> &model_gen,
-                           const syncf_t &sync, const vec3<coeff_sign> &config, const vec3<uint32_t> &initial)
+coeff_results coeff_search(const testf_t &test, const genf_t<uint64_t, const vec3<uint32_t> &> &model_gen,
+                           const vec3<coeff_sign> &config, const vec3<uint32_t> &initial)
 {
     uint64_t bias;
     vec3<uint32_t> coeff = initial;
@@ -47,12 +46,12 @@ coeff_results coeff_search(const interval &sub, float *ref_buf, float *model_buf
 
     while (true)
     {
-        std::tie(bias, count) = bias_search(sub, ref_buf, model_buf, buf_size, ref, bs_model_gen, sync);
+        std::tie(bias, count) = bias_search(test, bs_model_gen);
 
         if (count.regions == 0 || count.regions > 3)
             break;
 
-        std::size_t edit = count.regions - 1u;
+        std::size_t edit = count.regions - 1;
         direction dir = get_dir(config[edit], count.last_sign);
 
         if (directions[edit] == UNKNOWN)
@@ -61,7 +60,7 @@ coeff_results coeff_search(const interval &sub, float *ref_buf, float *model_buf
         }
         else if (directions[edit] != dir)
         {
-            if (++edit > 2u)
+            if (++edit > 2)
                 break;
 
             dir = (directions[edit] != UNKNOWN) ? directions[edit] : DOWN;  // DOWN is arbitrary

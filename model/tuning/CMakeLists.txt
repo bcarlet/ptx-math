@@ -5,6 +5,8 @@ add_library(tuning STATIC
   bias.hpp
   coefficients.cpp
   coefficients.hpp
+  test_handler.cpp
+  test_handler.hpp
 )
 
 add_subdirectory(algorithm)

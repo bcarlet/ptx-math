@@ -23,11 +23,3 @@ void basic_counters::accumulate(std::size_t n, const float *ref, const float *mo
 
     total += n;
 }
-
-void clear(basic_counters &count)
-{
-    count.exact = 0;
-    count.total = 0;
-    count.regions = 0;
-    count.last_sign = basic_counters::UNDEFINED;
-}
