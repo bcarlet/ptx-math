@@ -9,6 +9,8 @@ extern "C" {
 
 float parameterized_rcp(float x, const m_params *params);
 
+float parameterized_sqrt(float x, const m_params *params);
+
 float parameterized_rsqrt(float x, const m_params *params);
 
 float parameterized_lg2(float x, const m_params *params);
