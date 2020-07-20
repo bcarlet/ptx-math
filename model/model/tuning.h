@@ -13,6 +13,8 @@ float parameterized_rsqrt(float x, const m_params *params);
 
 float parameterized_lg2(float x, const m_params *params);
 
+float parameterized_ex2(float x, const m_params *params);
+
 #ifdef __cplusplus
 }   // extern "C"
 #endif
