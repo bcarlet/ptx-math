@@ -7,4 +7,6 @@ target_sources(model PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/rsqrt_table.h
   ${CMAKE_CURRENT_SOURCE_DIR}/lg2_table.c
   ${CMAKE_CURRENT_SOURCE_DIR}/lg2_table.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/ex2_table.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/ex2_table.h
 )
