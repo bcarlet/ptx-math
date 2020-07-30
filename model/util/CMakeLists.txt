@@ -5,6 +5,7 @@ add_library(util STATIC
   devices.hpp
   progress.cpp
   progress.hpp
+  pun.hpp
   stopwatch.hpp
 )
 

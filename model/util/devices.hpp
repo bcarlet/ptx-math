@@ -5,7 +5,7 @@
 #include <vector>
 
 /**
- * Print the available compute-capable devices.
+ * Print the available compute-capable devices to stdout.
  */
 void print_devices();
 
