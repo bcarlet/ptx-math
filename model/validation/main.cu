@@ -7,14 +7,15 @@
 using float_limits = std::numeric_limits<float>;
 
 // sanity checks
-static_assert(CHAR_BIT == 8, "CHAR_BIT != 8");
-static_assert(sizeof(float) == 4, "sizeof(float) != 4");
-static_assert(!float_limits::traps, "float generates traps");
+static_assert(CHAR_BIT == 8, "byte not 8 bits");
+static_assert(sizeof(float) == 4, "float not 4 bytes");
+static_assert(!float_limits::traps, "floating-point exceptions enabled");
 
 #include "model/model.h"
-#include "util/progress.hpp"
 #include "util/cuda.hpp"
 #include "util/devices.hpp"
+#include "util/progress.hpp"
+#include "util/pun.hpp"
 #include "ptx/ptx.hpp"
 
 static constexpr uint32_t BATCH_SIZE = UINT32_C(1) << 20;
@@ -35,31 +36,26 @@ static void map(int n, float *x)
 
 static void initialize_batch(uint32_t batch, float *x)
 {
-    uint32_t val = batch * BATCH_SIZE;
+    const uint32_t base_val = batch * BATCH_SIZE;
 
     for (uint32_t i = 0; i < BATCH_SIZE; i++)
     {
-        memcpy(x + i, &val, 4u);
-        val++;
+        x[i] = pun<float>(base_val + i);
     }
 }
 
 static uint32_t compare_batch(uint32_t batch, const float *x, float (*f)(float))
 {
+    const uint32_t base_val = batch * BATCH_SIZE;
     uint32_t num_exact = 0;
-    uint32_t val = batch * BATCH_SIZE;
 
     for (uint32_t i = 0; i < BATCH_SIZE; i++)
     {
-        float fval;
-        memcpy(&fval, &val, 4u);
+        const float val = pun<float>(base_val + i);
+        const float cmp = f(val);
 
-        const float cmp = f(fval);
-
-        if (memcmp(x + i, &cmp, 4u) == 0)
+        if (memcmp(x + i, &cmp, sizeof(float)) == 0)
             num_exact++;
-
-        val++;
     }
 
     return num_exact;
