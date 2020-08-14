@@ -9,6 +9,10 @@ indent_style = space
 indent_size = 4
 trim_trailing_whitespace = true
 
+[*.{wl,wls}]
+end_of_line = unset
+indent_style = tab
+
 [{makefile,Makefile}]
 indent_style = tab
 
