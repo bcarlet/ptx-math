@@ -8,7 +8,8 @@ void test(const interval &sub, float *reference_buf, float *model_buf, std::size
 
     while (true)
     {
-        std::size_t size = initialize_batch(sub, start, start, buf_size, reference_buf, model_buf);
+        std::size_t size;
+        std::tie(size, start) = initialize_batch(start, sub.greatest, reference_buf, model_buf, buf_size);
 
         if (size == 0u)
             break;

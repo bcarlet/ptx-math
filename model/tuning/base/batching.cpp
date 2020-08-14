@@ -2,13 +2,12 @@
 
 #include <cmath>
 
-std::size_t initialize_batch(const interval &global, float start, float &next,
-                             std::size_t max_size, float *x, float *y)
+batch_result initialize_batch(float start, float last, float *x, float *y, std::size_t buf_size)
 {
     std::size_t i = 0;
     float val = start;
 
-    while (i < max_size && val <= global.greatest)
+    while (i < buf_size && val <= last)
     {
         x[i] = val;
         y[i] = val;
@@ -17,7 +16,5 @@ std::size_t initialize_batch(const interval &global, float start, float &next,
         i++;
     }
 
-    next = val;
-
-    return i;
+    return std::make_pair(i, val);
 }

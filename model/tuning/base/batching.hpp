@@ -1,11 +1,13 @@
 #ifndef BATCHING_HPP
 #define BATCHING_HPP
 
-#include <cstddef>
+#include <tuple>
 
-#include "interval.hpp"
+/**
+ * Wraps the resulting batch size and the value which will start the next batch.
+ */
+using batch_result = std::pair<std::size_t, float>;
 
-std::size_t initialize_batch(const interval &global, float start, float &next,
-                             std::size_t max_size, float *x, float *y);
+batch_result initialize_batch(float start, float last, float *x, float *y, std::size_t buf_size);
 
 #endif
