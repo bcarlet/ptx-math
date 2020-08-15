@@ -7,8 +7,7 @@
 using float_limits = std::numeric_limits<float>;
 
 // sanity checks
-static_assert(CHAR_BIT == 8, "byte not 8 bits");
-static_assert(sizeof(float) == 4, "float not 4 bytes");
+static_assert(float_limits::is_iec559, "float not IEEE 754");
 static_assert(!float_limits::traps, "floating-point exceptions enabled");
 
 #include "model/model.h"
