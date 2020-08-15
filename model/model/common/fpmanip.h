@@ -13,20 +13,20 @@
 
 #define FP_FORMAT(sign, exp, frac) (((sign) << 31) | ((exp) << 23) | (frac))
 
-inline uint32_t reinterpret_float(float x)
+inline uint32_t float_as_u32(float x)
 {
-    uint32_t i;
-    memcpy(&i, &x, 4u);
+    uint32_t r;
+    memcpy(&r, &x, 4u);
 
-    return i;
+    return r;
 }
 
-inline float reinterpret_uint(uint32_t x)
+inline float u32_as_float(uint32_t x)
 {
-    float f;
-    memcpy(&f, &x, 4u);
+    float r;
+    memcpy(&r, &x, 4u);
 
-    return f;
+    return r;
 }
 
 #endif

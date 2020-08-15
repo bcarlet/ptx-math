@@ -46,7 +46,7 @@ float parameterized_rcp(float x, const m_params *params)
         break;
     }
 
-    const uint32_t x_bits = reinterpret_float(x);
+    const uint32_t x_bits = float_as_u32(x);
 
     const uint32_t xh = UPPER_SIGNIFICAND(x_bits, RCP_M);
     const uint32_t xl = LOWER_SIGNIFICAND(x_bits, RCP_M);
@@ -78,7 +78,7 @@ float parameterized_rcp(float x, const m_params *params)
 
     const uint32_t r_bits = FP_FORMAT(r_sign, r_exp, r_frac);
 
-    const float r = reinterpret_uint(r_bits);
+    const float r = u32_as_float(r_bits);
 
     return ldexpf(r, -x_log2);
 }

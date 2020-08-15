@@ -48,7 +48,7 @@ float parameterized_ex2(float x, const m_params *params)
     float integral;
     x = modff(x, &integral);
 
-    uint32_t x_bits = reinterpret_float(x);
+    uint32_t x_bits = float_as_u32(x);
 
     if (x != 0.0f)
     {
@@ -84,7 +84,7 @@ float parameterized_ex2(float x, const m_params *params)
     const uint32_t r_frac = (sum >> (EX2_SUM_WEIGHT - 23)) & MASK_U32(23);
     const uint32_t r_bits = FP_FORMAT(0u, 127u, r_frac);
 
-    const float r = reinterpret_uint(r_bits);
+    const float r = u32_as_float(r_bits);
     const float reconstr = fexp2i(integral) * r;
 
     return square_result ? (reconstr * reconstr) : reconstr;

@@ -7,7 +7,7 @@
 
 inline float canonical_nan(void)
 {
-    return reinterpret_uint(PTX_NAN);
+    return u32_as_float(PTX_NAN);
 }
 
 #endif

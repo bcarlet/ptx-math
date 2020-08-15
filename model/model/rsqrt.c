@@ -48,7 +48,7 @@ float parameterized_rsqrt(float x, const m_params *params)
 
     if (signbit(x)) return canonical_nan();
 
-    const uint32_t x_bits = reinterpret_float(x);
+    const uint32_t x_bits = float_as_u32(x);
 
     const uint32_t xh = UPPER_SIGNIFICAND(x_bits, RSQRT_M);
     const uint32_t xl = LOWER_SIGNIFICAND(x_bits, RSQRT_M);
@@ -84,7 +84,7 @@ float parameterized_rsqrt(float x, const m_params *params)
     const uint32_t r_frac = (sum >> (RSQRT_SUM_WEIGHT - 23)) & MASK_U32(23);
     const uint32_t r_bits = FP_FORMAT(0u, 126u, r_frac);
 
-    const float r = reinterpret_uint(r_bits);
+    const float r = u32_as_float(r_bits);
 
     return ldexpf(r, -x_log2 / 2);
 }
