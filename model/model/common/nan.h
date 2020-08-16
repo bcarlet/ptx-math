@@ -1,7 +1,7 @@
 #ifndef NAN_H
 #define NAN_H
 
-#include "fpmanip.h"
+#include "bitcast.h"
 
 #define PTX_NAN UINT32_C(0x7fffffff)
 

@@ -2,6 +2,7 @@
 #include "tuning.h"
 
 #include "tables/rcp_table.h"
+#include "common/bitcast.h"
 #include "common/fpmanip.h"
 #include "common/nan.h"
 #include "common/squarer.h"

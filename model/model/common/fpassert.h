@@ -3,10 +3,9 @@
 
 #include <assert.h>
 #include <limits.h>
-#include <float.h>
 
-static_assert(CHAR_BIT == 8, "CHAR_BIT != 8");
-static_assert(sizeof(float) == 4, "sizeof(float) != 4");
-static_assert(FLT_RADIX == 2, "FLT_RADIX != 2");
+static_assert(CHAR_BIT == 8, "byte not 8 bits");
+static_assert(sizeof(float) == 4, "float not 4 bytes");
+static_assert(sizeof(double) == 8, "double not 8 bytes");
 
 #endif
