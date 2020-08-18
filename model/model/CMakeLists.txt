@@ -5,8 +5,7 @@ add_library(model STATIC
   rcp.c
   sqrt.c
   rsqrt.c
-  sin.c
-  cos.c
+  sincos.c
   lg2.c
   ex2.c
 )

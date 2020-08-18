@@ -36,6 +36,21 @@ float parameterized_sin(float x, const m_params *params)
     return poly_sincos(reduced, sign, params);
 }
 
+float model_cos(float x)
+{
+    uint32_t sign, quadrant;
+    uint32_t reduced = rro_internal(x, &sign, &quadrant);
+
+    if (quadrant >> 7) return canonical_nan();
+
+    sign = 0u;
+
+    if (!(quadrant & 1u)) reduced = ~reduced;
+    if ((quadrant + 1u) & 2u) sign = 1u;
+
+    return poly_sincos(reduced, sign, &model_params);
+}
+
 uint32_t rro_internal(float x, uint32_t *sign, uint32_t *quadrant)
 {
     const uint32_t rr = rro_sincos(x);
