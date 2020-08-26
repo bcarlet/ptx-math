@@ -9,7 +9,7 @@
 
 #include <math.h>
 
-static const m_params default_params =
+static const m_params model_params =
 {
     .table = rsqrt_table,
     .bias = UINT64_C(0x7fff800000000000),
@@ -18,7 +18,7 @@ static const m_params default_params =
 
 float model_rsqrt(float x)
 {
-    return parameterized_rsqrt(x, &default_params);
+    return parameterized_rsqrt(x, &model_params);
 }
 
 float parameterized_rsqrt(float x, const m_params *params)
@@ -33,15 +33,10 @@ float parameterized_rsqrt(float x, const m_params *params)
         return signbit(x) ? canonical_nan() : 0.0f;
     case FP_ZERO:
         return copysignf(INFINITY, x);
-#ifdef PTX_FTZ
-    case FP_SUBNORMAL:
-        return copysignf(INFINITY, x);
-#else
     case FP_SUBNORMAL:
         x_log2 = ilogbf(x);
         x *= 0x1p24f;
         break;
-#endif
     case FP_NORMAL:
         x_log2 = ilogbf(x);
         break;

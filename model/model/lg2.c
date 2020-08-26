@@ -13,7 +13,7 @@
 
 #define LG2_SUM_TRUNCATION 20
 
-static const m_params default_params =
+static const m_params model_params =
 {
     .table = lg2_table,
     .bias = UINT64_C(0x868b000000000000),
@@ -22,7 +22,7 @@ static const m_params default_params =
 
 float model_lg2(float x)
 {
-    return parameterized_lg2(x, &default_params);
+    return parameterized_lg2(x, &model_params);
 }
 
 float parameterized_lg2(float x, const m_params *params)
@@ -37,23 +37,14 @@ float parameterized_lg2(float x, const m_params *params)
         return signbit(x) ? canonical_nan() : INFINITY;
     case FP_ZERO:
         return -INFINITY;
-#ifdef PTX_FTZ
-    case FP_SUBNORMAL:
-        return -INFINITY;
-#else
     case FP_SUBNORMAL:
         x *= 0x1p24f;
         subnormal = true;
-
-        break;
-#endif
-    case FP_NORMAL:
-        if (x == 1.0f) return 0.0f;
-
         break;
     }
 
     if (signbit(x)) return canonical_nan();
+    if (x == 1.0f) return 0.0f;
 
     const uint32_t x_bits = float_as_u32(x);
 

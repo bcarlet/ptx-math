@@ -33,15 +33,10 @@ float parameterized_rcp(float x, const m_params *params)
         return copysignf(0.0f, x);
     case FP_ZERO:
         return copysignf(INFINITY, x);
-#ifdef PTX_FTZ
-    case FP_SUBNORMAL:
-        return copysignf(INFINITY, x);
-#else
     case FP_SUBNORMAL:
         x_log2 = ilogbf(x);
         x *= 0x1p24f;
         break;
-#endif
     case FP_NORMAL:
         x_log2 = ilogbf(x);
         break;

@@ -33,15 +33,10 @@ float parameterized_sqrt(float x, const m_params *params)
         return signbit(x) ? canonical_nan() : INFINITY;
     case FP_ZERO:
         return copysignf(0.0f, x);
-#ifdef PTX_FTZ
-    case FP_SUBNORMAL:
-        return copysignf(0.0f, x);
-#else
     case FP_SUBNORMAL:
         x_log2 = ilogbf(x);
         x *= 0x1p24f;
         break;
-#endif
     case FP_NORMAL:
         x_log2 = ilogbf(x);
         break;
