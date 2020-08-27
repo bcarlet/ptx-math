@@ -9,5 +9,5 @@ set_target_properties(validate PROPERTIES
   CMAKE_CUDA_STANDARD 11
 )
 
-target_include_directories(validate PRIVATE ../)
+target_include_directories(validate PRIVATE ${PROJECT_SOURCE_DIR}/src)
 target_link_libraries(validate PRIVATE model ptx util)
