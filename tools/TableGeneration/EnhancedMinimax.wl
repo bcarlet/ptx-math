@@ -4,7 +4,7 @@ BeginPackage["EnhancedMinimax`"]
 Needs["FunctionApproximations`"]
 Needs["TableOutput`"]
 
-computecoeffts::usage = "computecoeffts[f, {a, b}, m, t, p, q, filename] computes the 2^m triplets of coefficients with word lengths t, p, and q of the quadratic polynomial for f on (a, b), to be outputted in filename."
+computecoeffts::usage = "computecoeffts[f, {a, b}, m, t, p, q, filename] computes the 2^m triplets of coefficients with word lengths t, p, and q of the quadratic polynomial for f on (a, b), to be output in filename."
 
 Begin["Private`"]
 
@@ -29,16 +29,24 @@ computecoeffts[f_, {a_, b_}, m_, t_, p_, q_, filename_] :=
 		expr := f[a+length*i+x];
 
 		out = OpenWrite[filename];
-		
+
+		(* 	Enhanced minimax approximation.
+			J.-A. Pineiro, S. F. Oberman, J.-M. Muller, and J. D. Bruguera, "High-speed function
+			approximation using a minimax quadratic interpolator," IEEE Transactions on Computers,
+			vol. 54, no. 3, pp. 304–318, March 2005. *)
 		For[i = 0, i < 2^m, i++,
 			poll = minimax[expr, {x, interval, 2, 0}];
+
 			a1 = Coefficient[poll, x];
 			a2 = Coefficient[poll, x, 2];
 			C1 = roundbits[a1, p];
 			aa2 = a2+(a1-C1)*2^m;
 			C2 = roundbits[aa2, q];
-			p0 = minimax[expr-C1*x-C2*x^2, {x, interval, 2, 0}]; (* Pineiro uses degree 0, Oberman uses degree 2 *)
+
+			(* Pineiro et al., 2005, uses degree 0; Oberman & Siu, 2005, uses degree 2 *)
+			p0 = minimax[expr-C1*x-C2*x^2, {x, interval, 2, 0}];
 			C0 = roundbits[Coefficient[p0, x, 0], t];
+
 			err = infnorm[expr-C0-C1*x-C2*x^2, x, interval];
 			errmax = Max[errmax, err];
 
@@ -46,7 +54,7 @@ computecoeffts[f_, {a_, b_}, m_, t_, p_, q_, filename_] :=
 		];
 
 		Close[out];
-		
+
 		errmax
 	]
 
