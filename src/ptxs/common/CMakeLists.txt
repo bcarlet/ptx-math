@@ -1,4 +1,4 @@
-target_sources(model PRIVATE
+target_sources(ptxs PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/bitmask.h
   ${CMAKE_CURRENT_SOURCE_DIR}/fpassert.h
   ${CMAKE_CURRENT_SOURCE_DIR}/fpmanip.h
@@ -10,4 +10,4 @@ target_sources(model PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/squarer.h
 )
 
-target_compile_options(model PRIVATE $<$<C_COMPILER_ID:GNU>:-mbmi2>)
+target_compile_options(ptxs PRIVATE $<$<C_COMPILER_ID:GNU>:-mbmi2>)

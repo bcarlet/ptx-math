@@ -10,12 +10,12 @@ using float_limits = std::numeric_limits<float>;
 static_assert(float_limits::is_iec559, "float not IEEE 754");
 static_assert(!float_limits::traps, "floating-point exceptions enabled");
 
-#include "model/model.h"
+#include "ptx/ptx.hpp"
+#include "ptxs/models.h"
 #include "util/cuda.hpp"
 #include "util/devices.hpp"
 #include "util/progress.hpp"
 #include "util/pun.hpp"
-#include "ptx/ptx.hpp"
 
 static constexpr uint32_t BATCH_SIZE = UINT32_C(1) << 20;
 static constexpr uint32_t BATCH_COUNT = (UINT64_C(1) << 32) / BATCH_SIZE;
@@ -85,7 +85,7 @@ int main()
 
         CUDA_CHECK(cudaDeviceSynchronize());
 
-        num_exact += compare_batch(batch, x, model_rcp);
+        num_exact += compare_batch(batch, x, ptxs_rcp);
     }
 
     print_progress_bar(1.0f);

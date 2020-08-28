@@ -1,4 +1,4 @@
-#include "model.h"
+#include "models.h"
 #include "tuning.h"
 
 #include "tables/rsqrt_table.h"
@@ -9,19 +9,19 @@
 
 #include <math.h>
 
-static const m_params model_params =
+static const ptxs_params model_params =
 {
     .table = rsqrt_table,
     .bias = UINT64_C(0x7fff800000000000),
     .truncation = 19
 };
 
-float model_rsqrt(float x)
+float ptxs_rsqrt(float x)
 {
-    return parameterized_rsqrt(x, &model_params);
+    return ptxs_param_rsqrt(x, &model_params);
 }
 
-float parameterized_rsqrt(float x, const m_params *params)
+float ptxs_param_rsqrt(float x, const ptxs_params *params)
 {
     int x_log2;
 

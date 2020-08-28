@@ -1,4 +1,4 @@
-#include "model.h"
+#include "models.h"
 #include "tuning.h"
 
 #include "tables/rcp_table.h"
@@ -9,19 +9,19 @@
 
 #include <math.h>
 
-static const m_params model_params =
+static const ptxs_params model_params =
 {
     .table = rcp_table,
     .bias = UINT64_C(0x67e7000000000000),
     .truncation = 17
 };
 
-float model_rcp(float x)
+float ptxs_rcp(float x)
 {
-    return parameterized_rcp(x, &model_params);
+    return ptxs_param_rcp(x, &model_params);
 }
 
-float parameterized_rcp(float x, const m_params *params)
+float ptxs_param_rcp(float x, const ptxs_params *params)
 {
     int x_log2;
 

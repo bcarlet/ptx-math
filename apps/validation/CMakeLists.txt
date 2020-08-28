@@ -10,4 +10,4 @@ set_target_properties(validate PROPERTIES
 )
 
 target_include_directories(validate PRIVATE ${PROJECT_SOURCE_DIR}/src)
-target_link_libraries(validate PRIVATE model ptx util)
+target_link_libraries(validate PRIVATE ptx ptxs util)

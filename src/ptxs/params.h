@@ -3,11 +3,11 @@
 
 #include <stdint.h>
 
-typedef struct m_params
+typedef struct ptxs_params
 {
     const uint32_t (*table)[3];
     uint64_t bias;
     int truncation;
-} m_params;
+} ptxs_params;
 
 #endif

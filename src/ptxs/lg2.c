@@ -1,4 +1,4 @@
-#include "model.h"
+#include "models.h"
 #include "tuning.h"
 
 #include "tables/lg2_table.h"
@@ -13,19 +13,19 @@
 
 #define LG2_SUM_TRUNCATION 20
 
-static const m_params model_params =
+static const ptxs_params model_params =
 {
     .table = lg2_table,
     .bias = UINT64_C(0x868b000000000000),
     .truncation = 19
 };
 
-float model_lg2(float x)
+float ptxs_lg2(float x)
 {
-    return parameterized_lg2(x, &model_params);
+    return ptxs_param_lg2(x, &model_params);
 }
 
-float parameterized_lg2(float x, const m_params *params)
+float ptxs_param_lg2(float x, const ptxs_params *params)
 {
     bool subnormal = false;
 

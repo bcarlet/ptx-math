@@ -1,4 +1,4 @@
-#include "model.h"
+#include "models.h"
 #include "tuning.h"
 
 #include "reduction/rro_sincos.h"
@@ -9,21 +9,21 @@
 #include "common/squarer.h"
 
 static uint32_t rro_internal(float, uint32_t *, uint32_t *);
-static float poly_sincos(uint32_t, uint32_t, const m_params *);
+static float poly_sincos(uint32_t, uint32_t, const ptxs_params *);
 
-static const m_params model_params =
+static const ptxs_params model_params =
 {
     .table = sin_table,
     .bias = UINT64_C(0x0000000000000000),
     .truncation = 19
 };
 
-float model_sin(float x)
+float ptxs_sin(float x)
 {
-    return parameterized_sin(x, &model_params);
+    return ptxs_param_sin(x, &model_params);
 }
 
-float parameterized_sin(float x, const m_params *params)
+float ptxs_param_sin(float x, const ptxs_params *params)
 {
     uint32_t sign, quadrant;
     uint32_t reduced = rro_internal(x, &sign, &quadrant);
@@ -36,7 +36,7 @@ float parameterized_sin(float x, const m_params *params)
     return poly_sincos(reduced, sign, params);
 }
 
-float model_cos(float x)
+float ptxs_cos(float x)
 {
     uint32_t sign, quadrant;
     uint32_t reduced = rro_internal(x, &sign, &quadrant);
@@ -61,7 +61,7 @@ uint32_t rro_internal(float x, uint32_t *sign, uint32_t *quadrant)
     return rr;
 }
 
-float poly_sincos(uint32_t reduced, uint32_t sign, const m_params *params)
+float poly_sincos(uint32_t reduced, uint32_t sign, const ptxs_params *params)
 {
     const uint32_t xh = UPPER_SIGNIFICAND(reduced, SIN_M);
     const uint32_t xl = LOWER_SIGNIFICAND(reduced, SIN_M);

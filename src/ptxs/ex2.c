@@ -1,4 +1,4 @@
-#include "model.h"
+#include "models.h"
 #include "tuning.h"
 
 #include "tables/ex2_table.h"
@@ -13,19 +13,19 @@
 static int min(int a, int b);
 static float fexp2i(float n);
 
-static const m_params model_params =
+static const ptxs_params model_params =
 {
     .table = ex2_table,
     .bias = UINT64_C(0x6fc4000000000000),
     .truncation = 19
 };
 
-float model_ex2(float x)
+float ptxs_ex2(float x)
 {
-    return parameterized_ex2(x, &model_params);
+    return ptxs_param_ex2(x, &model_params);
 }
 
-float parameterized_ex2(float x, const m_params *params)
+float ptxs_param_ex2(float x, const ptxs_params *params)
 {
     switch (fpclassify(x))
     {
