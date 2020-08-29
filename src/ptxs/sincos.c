@@ -14,8 +14,7 @@ static float poly_sincos(uint32_t, uint32_t, const ptxs_params *);
 static const ptxs_params model_params =
 {
     .table = sin_table,
-    .bias = UINT64_C(0x0000000000000000),
-    .truncation = 19
+    .bias = UINT64_C(0x0000000000000000)
 };
 
 float ptxs_sin(float x)
@@ -70,7 +69,7 @@ float poly_sincos(uint32_t reduced, uint32_t sign, const ptxs_params *params)
 
     uint64_t c0_term = c[0];
     uint64_t c1_term = c[1] * (uint64_t)xl;
-    uint64_t c2_term = c[2] * square_approx(xl, params->truncation);
+    uint64_t c2_term = c[2] * square_approx(xl);
 
     c0_term <<= SIN_C0_TERM_ALIGNMENT;
     c1_term <<= SIN_C1_TERM_ALIGNMENT;

@@ -16,8 +16,7 @@
 static const ptxs_params model_params =
 {
     .table = lg2_table,
-    .bias = UINT64_C(0x868b000000000000),
-    .truncation = 19
+    .bias = UINT64_C(0x868b000000000000)
 };
 
 float ptxs_lg2(float x)
@@ -55,7 +54,7 @@ float ptxs_param_lg2(float x, const ptxs_params *params)
 
     uint64_t c0_term = c[0];
     uint64_t c1_term = c[1] * (uint64_t)xl;
-    uint64_t c2_term = c[2] * square_approx(xl, params->truncation);
+    uint64_t c2_term = c[2] * square_approx(xl);
 
     c0_term <<= LG2_C0_TERM_ALIGNMENT;
     c1_term <<= LG2_C1_TERM_ALIGNMENT;

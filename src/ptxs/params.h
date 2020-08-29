@@ -7,7 +7,6 @@ typedef struct ptxs_params
 {
     const uint32_t (*table)[3];
     uint64_t bias;
-    int truncation;
 } ptxs_params;
 
 #endif

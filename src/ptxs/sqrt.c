@@ -12,8 +12,7 @@
 static const ptxs_params model_params =
 {
     .table = sqrt_table,
-    .bias = UINT64_C(0x7fff800000000000),
-    .truncation = 19
+    .bias = UINT64_C(0x7fff800000000000)
 };
 
 float ptxs_sqrt(float x)
@@ -61,7 +60,7 @@ float ptxs_param_sqrt(float x, const ptxs_params *params)
 
     uint64_t c0_term = c[0];
     uint64_t c1_term = c[1] * (uint64_t)xl;
-    uint64_t c2_term = c[2] * square_approx(xl, params->truncation);
+    uint64_t c2_term = c[2] * square_approx(xl);
 
     c0_term <<= SQRT_C0_TERM_ALIGNMENT;
     c1_term <<= SQRT_C1_TERM_ALIGNMENT;

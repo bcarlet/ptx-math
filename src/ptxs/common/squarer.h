@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-uint64_t square_approx(uint32_t x, int t_cols);
+uint64_t square_approx(uint32_t x);
 
 #endif
