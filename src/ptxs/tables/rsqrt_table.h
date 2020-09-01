@@ -14,6 +14,6 @@
 
 #define RSQRT_SUM_WEIGHT 57
 
-extern const uint32_t rsqrt_table[128][3];
+extern const uint32_t ptxs_rsqrt_table[128][3];
 
 #endif

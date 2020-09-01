@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-uint32_t rro_sincos(float x);
+uint32_t ptxs_rro_sincos(float x);
 
 #endif

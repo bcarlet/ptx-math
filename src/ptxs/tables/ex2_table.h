@@ -14,6 +14,6 @@
 
 #define EX2_SUM_WEIGHT 57
 
-extern const uint32_t ex2_table[64][3];
+extern const uint32_t ptxs_ex2_table[64][3];
 
 #endif

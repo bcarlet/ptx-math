@@ -15,7 +15,7 @@ static float fexp2i(float n);
 
 static const ptxs_params model_params =
 {
-    .table = ex2_table,
+    .table = ptxs_ex2_table,
     .bias = UINT64_C(0x6fc4000000000000)
 };
 
@@ -29,7 +29,7 @@ float ptxs_param_ex2(float x, const ptxs_params *params)
     switch (fpclassify(x))
     {
     case FP_NAN:
-        return canonical_nan();
+        return ptxs_nan();
     case FP_INFINITE:
         return signbit(x) ? 0.0f : INFINITY;
     case FP_ZERO:
@@ -71,7 +71,7 @@ float ptxs_param_ex2(float x, const ptxs_params *params)
 
     uint64_t c0_term = c[0];
     uint64_t c1_term = c[1] * (uint64_t)xl;
-    uint64_t c2_term = c[2] * square_approx(xl);
+    uint64_t c2_term = c[2] * ptxs_square_approx(xl);
 
     c0_term <<= EX2_C0_TERM_ALIGNMENT;
     c1_term <<= EX2_C1_TERM_ALIGNMENT;

@@ -1,6 +1,6 @@
 #include "ex2_table.h"
 
-const uint32_t ex2_table[64][3] =
+const uint32_t ptxs_ex2_table[64][3] =
 {
     {0x2000002, 0x58b9, 0x1ee}, {0x2059349, 0x59b0, 0x1f5},
     {0x20b361d, 0x5aaa, 0x1fa}, {0x210e8a4, 0x5ba7, 0x1ff},

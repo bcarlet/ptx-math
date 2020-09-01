@@ -13,7 +13,7 @@ static float poly_sincos(uint32_t, uint32_t, const ptxs_params *);
 
 static const ptxs_params model_params =
 {
-    .table = sin_table,
+    .table = ptxs_sin_table,
     .bias = UINT64_C(0x0000000000000000)
 };
 
@@ -27,7 +27,7 @@ float ptxs_param_sin(float x, const ptxs_params *params)
     uint32_t sign, quadrant;
     uint32_t reduced = rro_internal(x, &sign, &quadrant);
 
-    if (quadrant >> 7) return canonical_nan();
+    if (quadrant >> 7) return ptxs_nan();
 
     if (quadrant & 1u) reduced = ~reduced;
     if (quadrant & 2u) sign = !sign;
@@ -40,7 +40,7 @@ float ptxs_cos(float x)
     uint32_t sign, quadrant;
     uint32_t reduced = rro_internal(x, &sign, &quadrant);
 
-    if (quadrant >> 7) return canonical_nan();
+    if (quadrant >> 7) return ptxs_nan();
 
     sign = 0u;
 
@@ -52,7 +52,7 @@ float ptxs_cos(float x)
 
 uint32_t rro_internal(float x, uint32_t *sign, uint32_t *quadrant)
 {
-    const uint32_t rr = rro_sincos(x);
+    const uint32_t rr = ptxs_rro_sincos(x);
 
     *sign = rr >> 31;
     *quadrant = (rr >> 23) & MASK_U32(8);
@@ -69,7 +69,7 @@ float poly_sincos(uint32_t reduced, uint32_t sign, const ptxs_params *params)
 
     uint64_t c0_term = c[0];
     uint64_t c1_term = c[1] * (uint64_t)xl;
-    uint64_t c2_term = c[2] * square_approx(xl);
+    uint64_t c2_term = c[2] * ptxs_square_approx(xl);
 
     c0_term <<= SIN_C0_TERM_ALIGNMENT;
     c1_term <<= SIN_C1_TERM_ALIGNMENT;

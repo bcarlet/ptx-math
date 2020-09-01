@@ -14,6 +14,6 @@
 
 #define SIN_SUM_WEIGHT 56
 
-extern const uint32_t sin_table[64][3];
+extern const uint32_t ptxs_sin_table[64][3];
 
 #endif

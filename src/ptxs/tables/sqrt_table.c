@@ -1,6 +1,6 @@
 #include "sqrt_table.h"
 
-const uint32_t sqrt_table[128][3] =
+const uint32_t ptxs_sqrt_table[128][3] =
 {
     {0x1ffffff, 0x0ffff, 0x1fa}, {0x203fc07, 0x0fe05, 0x1ee},
     {0x207f03e, 0x0fc16, 0x1e2}, {0x20bdcd1, 0x0fa33, 0x1d8},

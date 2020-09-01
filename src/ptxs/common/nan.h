@@ -3,11 +3,11 @@
 
 #include "bitcast.h"
 
-#define PTX_NAN UINT32_C(0x7fffffff)
+#define PTX_CANONICAL_NAN UINT32_C(0x7fffffff)
 
-inline float canonical_nan(void)
+inline float ptxs_nan(void)
 {
-    return u32_as_float(PTX_NAN);
+    return u32_as_float(PTX_CANONICAL_NAN);
 }
 
 #endif

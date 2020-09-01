@@ -1,6 +1,6 @@
 #include "rsqrt_table.h"
 
-const uint32_t rsqrt_table[128][3] =
+const uint32_t ptxs_rsqrt_table[128][3] =
 {
     {0x3fffffb, 0xfffb, 0x2f2}, {0x3f817ab, 0xfa18, 0x2d5},
     {0x3f05d8d, 0xf46f, 0x2ba}, {0x3e8cfe1, 0xeefb, 0x2a0},

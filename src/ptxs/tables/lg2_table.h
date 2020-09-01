@@ -14,6 +14,6 @@
 
 #define LG2_SUM_WEIGHT 56
 
-extern const uint32_t lg2_table[64][3];
+extern const uint32_t ptxs_lg2_table[64][3];
 
 #endif

@@ -1,6 +1,6 @@
 #include "sin_table.h"
 
-const uint32_t sin_table[64][3] =
+const uint32_t ptxs_sin_table[64][3] =
 {
     {0x0000000, 0x6489, 0x00e}, {0x00c90a7, 0x6482, 0x030},
     {0x0191f64, 0x646a, 0x04c}, {0x025aa3e, 0x6444, 0x06e},

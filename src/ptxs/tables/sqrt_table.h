@@ -14,6 +14,6 @@
 
 #define SQRT_SUM_WEIGHT 58
 
-extern const uint32_t sqrt_table[128][3];
+extern const uint32_t ptxs_sqrt_table[128][3];
 
 #endif

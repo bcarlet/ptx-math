@@ -22,7 +22,7 @@ static uint32_t ppm_row(uint32_t x, int i)
     return x;
 }
 
-uint64_t square_approx(uint32_t x)
+uint64_t ptxs_square_approx(uint32_t x)
 {
     uint64_t error = ppm_antidiagonal(x) & MASK_U32(TRUNC_COLS);
 

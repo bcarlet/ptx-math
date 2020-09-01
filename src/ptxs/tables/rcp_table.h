@@ -14,6 +14,6 @@
 
 #define RCP_SUM_WEIGHT 56
 
-extern const uint32_t rcp_table[128][3];
+extern const uint32_t ptxs_rcp_table[128][3];
 
 #endif

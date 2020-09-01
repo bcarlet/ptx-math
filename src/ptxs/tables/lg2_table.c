@@ -1,6 +1,6 @@
 #include "lg2_table.h"
 
-const uint32_t lg2_table[64][3] =
+const uint32_t ptxs_lg2_table[64][3] =
 {
     {0x0000003, 0xb8a8, 0x2d7}, {0x016e796, 0xb5d1, 0x2c1},
     {0x02d75ac, 0xb310, 0x2ad}, {0x043ace6, 0xb064, 0x299},

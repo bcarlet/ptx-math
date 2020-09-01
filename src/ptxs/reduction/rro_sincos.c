@@ -28,7 +28,7 @@ static uint32_t lerp_sincos(double x)
     return x_bits;
 }
 
-uint32_t rro_sincos(float x)
+uint32_t ptxs_rro_sincos(float x)
 {
     const uint32_t sign = signbit(x) ? 1u : 0u;
 

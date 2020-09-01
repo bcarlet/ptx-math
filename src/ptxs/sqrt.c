@@ -11,7 +11,7 @@
 
 static const ptxs_params model_params =
 {
-    .table = sqrt_table,
+    .table = ptxs_sqrt_table,
     .bias = UINT64_C(0x7fff800000000000)
 };
 
@@ -27,9 +27,9 @@ float ptxs_param_sqrt(float x, const ptxs_params *params)
     switch (fpclassify(x))
     {
     case FP_NAN:
-        return canonical_nan();
+        return ptxs_nan();
     case FP_INFINITE:
-        return signbit(x) ? canonical_nan() : INFINITY;
+        return signbit(x) ? ptxs_nan() : INFINITY;
     case FP_ZERO:
         return copysignf(0.0f, x);
     case FP_SUBNORMAL:
@@ -41,7 +41,7 @@ float ptxs_param_sqrt(float x, const ptxs_params *params)
         break;
     }
 
-    if (signbit(x)) return canonical_nan();
+    if (signbit(x)) return ptxs_nan();
 
     const uint32_t x_bits = float_as_u32(x);
 
@@ -60,7 +60,7 @@ float ptxs_param_sqrt(float x, const ptxs_params *params)
 
     uint64_t c0_term = c[0];
     uint64_t c1_term = c[1] * (uint64_t)xl;
-    uint64_t c2_term = c[2] * square_approx(xl);
+    uint64_t c2_term = c[2] * ptxs_square_approx(xl);
 
     c0_term <<= SQRT_C0_TERM_ALIGNMENT;
     c1_term <<= SQRT_C1_TERM_ALIGNMENT;

@@ -1,6 +1,6 @@
 #include "rcp_table.h"
 
-const uint32_t rcp_table[128][3] =
+const uint32_t ptxs_rcp_table[128][3] =
 {
     {0x3fffffd, 0xfffe, 0x3f5}, {0x3f80fdf, 0xfc0a, 0x3dd},
     {0x3f03f03, 0xf82d, 0x3c6}, {0x3e88cb2, 0xf467, 0x3b1},

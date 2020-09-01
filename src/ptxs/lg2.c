@@ -15,7 +15,7 @@
 
 static const ptxs_params model_params =
 {
-    .table = lg2_table,
+    .table = ptxs_lg2_table,
     .bias = UINT64_C(0x868b000000000000)
 };
 
@@ -31,9 +31,9 @@ float ptxs_param_lg2(float x, const ptxs_params *params)
     switch (fpclassify(x))
     {
     case FP_NAN:
-        return canonical_nan();
+        return ptxs_nan();
     case FP_INFINITE:
-        return signbit(x) ? canonical_nan() : INFINITY;
+        return signbit(x) ? ptxs_nan() : INFINITY;
     case FP_ZERO:
         return -INFINITY;
     case FP_SUBNORMAL:
@@ -42,7 +42,7 @@ float ptxs_param_lg2(float x, const ptxs_params *params)
         break;
     }
 
-    if (signbit(x)) return canonical_nan();
+    if (signbit(x)) return ptxs_nan();
     if (x == 1.0f) return 0.0f;
 
     const uint32_t x_bits = float_as_u32(x);
@@ -54,7 +54,7 @@ float ptxs_param_lg2(float x, const ptxs_params *params)
 
     uint64_t c0_term = c[0];
     uint64_t c1_term = c[1] * (uint64_t)xl;
-    uint64_t c2_term = c[2] * square_approx(xl);
+    uint64_t c2_term = c[2] * ptxs_square_approx(xl);
 
     c0_term <<= LG2_C0_TERM_ALIGNMENT;
     c1_term <<= LG2_C1_TERM_ALIGNMENT;
