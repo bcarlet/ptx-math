@@ -1,8 +1,8 @@
 add_library(util STATIC
   cuda.cu
-  cuda.hpp
+  cuda.cuh
   devices.cu
-  devices.hpp
+  devices.cuh
   progbar.cpp
   progbar.hpp
   pun.hpp

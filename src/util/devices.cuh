@@ -1,5 +1,5 @@
-#ifndef UTIL_DEVICES_HPP
-#define UTIL_DEVICES_HPP
+#ifndef UTIL_DEVICES_CUH
+#define UTIL_DEVICES_CUH
 
 #include <cuda_runtime.h>
 #include <ostream>

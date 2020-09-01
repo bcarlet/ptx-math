@@ -1,5 +1,5 @@
-#ifndef UTIL_CUDA_HPP
-#define UTIL_CUDA_HPP
+#ifndef UTIL_CUDA_CUH
+#define UTIL_CUDA_CUH
 
 #include <cuda_runtime.h>
 

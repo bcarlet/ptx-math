@@ -10,10 +10,10 @@ using float_limits = std::numeric_limits<float>;
 static_assert(float_limits::is_iec559, "float not IEEE 754");
 static_assert(!float_limits::traps, "floating-point exceptions enabled");
 
-#include "ptx/ptx.hpp"
+#include "ptx/ptx.cuh"
 #include "ptxs/models.h"
-#include "util/cuda.hpp"
-#include "util/devices.hpp"
+#include "util/cuda.cuh"
+#include "util/devices.cuh"
 #include "util/progbar.hpp"
 #include "util/pun.hpp"
 

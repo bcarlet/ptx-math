@@ -1,5 +1,5 @@
-#include "devices.hpp"
-#include "cuda.hpp"
+#include "devices.cuh"
+#include "cuda.cuh"
 
 std::vector<cudaDeviceProp> get_device_props()
 {
