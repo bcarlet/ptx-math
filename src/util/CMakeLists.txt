@@ -3,8 +3,8 @@ add_library(util STATIC
   cuda.hpp
   devices.cu
   devices.hpp
-  progress.cpp
-  progress.hpp
+  progbar.cpp
+  progbar.hpp
   pun.hpp
   stopwatch.hpp
 )

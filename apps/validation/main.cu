@@ -1,8 +1,8 @@
 #include <cuda_runtime.h>
-#include <cstdio>
-#include <cinttypes>
+#include <cstdint>
 #include <cstring>
 #include <limits>
+#include <iostream>
 
 using float_limits = std::numeric_limits<float>;
 
@@ -14,7 +14,7 @@ static_assert(!float_limits::traps, "floating-point exceptions enabled");
 #include "ptxs/models.h"
 #include "util/cuda.hpp"
 #include "util/devices.hpp"
-#include "util/progress.hpp"
+#include "util/progbar.hpp"
 #include "util/pun.hpp"
 
 static constexpr uint32_t BATCH_SIZE = UINT32_C(1) << 20;
@@ -53,7 +53,7 @@ static uint32_t compare_batch(uint32_t batch, const float *x, float (*f)(float))
         const float val = pun<float>(base_val + i);
         const float cmp = f(val);
 
-        if (memcmp(x + i, &cmp, sizeof(float)) == 0)
+        if (std::memcmp(x + i, &cmp, sizeof(float)) == 0)
             num_exact++;
     }
 
@@ -62,22 +62,27 @@ static uint32_t compare_batch(uint32_t batch, const float *x, float (*f)(float))
 
 int main()
 {
-    puts("Detecting devices...");
-    print_devices();
+    std::cout << "Detecting devices...\n";
+    int device = 0;
 
-    int device;
+    for (const cudaDeviceProp &prop : get_device_props())
+    {
+        std::cout << "Device " << device++ << ": " << prop << '\n';
+    }
+
     CUDA_CHECK(cudaGetDevice(&device));
 
-    printf("Using device %d.\nRunning simulation...\n", device);
+    std::cout << "Using device " << device << ".\nRunning simulation...\n";
 
     float *x;
     CUDA_CHECK(cudaMallocManaged(&x, BATCH_SIZE * sizeof(float)));
 
+    progbar bar;
     uint64_t num_exact = 0;
 
     for (uint32_t batch = 0; batch < BATCH_COUNT; batch++)
     {
-        print_progress_bar((float)batch / BATCH_COUNT);
+        std::cout << bar.update((float)batch / BATCH_COUNT);
         initialize_batch(batch, x);
 
         map<ptx_instruction::RCP_APPROX_F32><<<GRID_DIM, BLOCK_DIM>>>(BATCH_SIZE, x);
@@ -88,10 +93,12 @@ int main()
         num_exact += compare_batch(batch, x, ptxs_rcp);
     }
 
-    print_progress_bar(1.0f);
-    putchar('\n');
+    std::cout << bar.update(1.0f) << '\n';
 
-    printf("Bit-exact: %" PRIu64 "\n", num_exact);
+    const char *const result = (num_exact == UINT64_C(4294967296)) ? "OK" : "FAIL";
+
+    std::cout << "Bit-exact: " << num_exact << '\n';
+    std::cout << "Result: " << result << '\n';
 
     CUDA_CHECK(cudaFree(x));
 
