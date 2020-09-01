@@ -63,13 +63,15 @@ static uint32_t compare_batch(uint32_t batch, const float *x, float (*f)(float))
 int main()
 {
     std::cout << "Detecting devices...\n";
-    int device = 0;
 
-    for (const cudaDeviceProp &prop : get_device_props())
+    const auto props = get_device_props();
+
+    for (std::size_t i = 0; i < props.size(); i++)
     {
-        std::cout << "Device " << device++ << ": " << prop << '\n';
+        std::cout << "Device " << i << ": " << props[i] << '\n';
     }
 
+    int device;
     CUDA_CHECK(cudaGetDevice(&device));
 
     std::cout << "Using device " << device << ".\nRunning simulation...\n";
