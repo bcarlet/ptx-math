@@ -1,5 +1,5 @@
-#ifndef PARAMS_H
-#define PARAMS_H
+#ifndef PTXS_PARAMS_H
+#define PTXS_PARAMS_H
 
 #include <stdint.h>
 

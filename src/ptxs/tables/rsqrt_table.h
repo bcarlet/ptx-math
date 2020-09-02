@@ -1,5 +1,5 @@
-#ifndef RSQRT_TABLE_H
-#define RSQRT_TABLE_H
+#ifndef PTXS_TABLES_RSQRT_TABLE_H
+#define PTXS_TABLES_RSQRT_TABLE_H
 
 #include <stdint.h>
 

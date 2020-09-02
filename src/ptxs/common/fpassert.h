@@ -1,5 +1,5 @@
-#ifndef FPASSERT_H
-#define FPASSERT_H
+#ifndef PTXS_COMMON_FPASSERT_H
+#define PTXS_COMMON_FPASSERT_H
 
 #include <assert.h>
 #include <limits.h>

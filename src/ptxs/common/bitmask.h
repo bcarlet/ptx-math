@@ -1,5 +1,5 @@
-#ifndef BITMASK_H
-#define BITMASK_H
+#ifndef PTXS_COMMON_BITMASK_H
+#define PTXS_COMMON_BITMASK_H
 
 #include <stdint.h>
 

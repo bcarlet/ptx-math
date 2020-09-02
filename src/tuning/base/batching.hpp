@@ -1,5 +1,5 @@
-#ifndef BATCHING_HPP
-#define BATCHING_HPP
+#ifndef TUNING_BASE_BATCHING_HPP
+#define TUNING_BASE_BATCHING_HPP
 
 #include <tuple>
 

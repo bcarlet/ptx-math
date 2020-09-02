@@ -1,5 +1,5 @@
-#ifndef MODELS_H
-#define MODELS_H
+#ifndef PTXS_MODELS_H
+#define PTXS_MODELS_H
 
 #ifdef __cplusplus
 extern "C" {

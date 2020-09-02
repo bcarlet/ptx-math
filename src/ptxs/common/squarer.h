@@ -1,5 +1,5 @@
-#ifndef SQUARER_H
-#define SQUARER_H
+#ifndef PTXS_COMMON_SQUARER_H
+#define PTXS_COMMON_SQUARER_H
 
 #include <stdint.h>
 

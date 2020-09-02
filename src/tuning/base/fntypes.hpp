@@ -1,5 +1,5 @@
-#ifndef FNTYPES_HPP
-#define FNTYPES_HPP
+#ifndef TUNING_BASE_FNTYPES_HPP
+#define TUNING_BASE_FNTYPES_HPP
 
 #include <cstddef>
 #include <functional>

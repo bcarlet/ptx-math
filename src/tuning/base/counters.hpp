@@ -1,5 +1,5 @@
-#ifndef COUNTERS_HPP
-#define COUNTERS_HPP
+#ifndef TUNING_BASE_COUNTERS_HPP
+#define TUNING_BASE_COUNTERS_HPP
 
 #include <cstddef>
 

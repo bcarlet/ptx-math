@@ -1,5 +1,5 @@
-#ifndef TEST_HANDLER_HPP
-#define TEST_HANDLER_HPP
+#ifndef TUNING_TEST_HANDLER_HPP
+#define TUNING_TEST_HANDLER_HPP
 
 #include "base/interval.hpp"
 #include "base/fntypes.hpp"

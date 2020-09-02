@@ -1,5 +1,5 @@
-#ifndef TUNING_H
-#define TUNING_H
+#ifndef PTXS_TUNING_H
+#define PTXS_TUNING_H
 
 #include "params.h"
 

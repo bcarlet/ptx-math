@@ -1,5 +1,5 @@
-#ifndef FPMANIP_H
-#define FPMANIP_H
+#ifndef PTXS_COMMON_FPMANIP_H
+#define PTXS_COMMON_FPMANIP_H
 
 #include "bitmask.h"
 

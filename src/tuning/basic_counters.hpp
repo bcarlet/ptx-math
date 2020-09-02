@@ -1,5 +1,5 @@
-#ifndef BASIC_COUNTERS_HPP
-#define BASIC_COUNTERS_HPP
+#ifndef TUNING_BASIC_COUNTERS_HPP
+#define TUNING_BASIC_COUNTERS_HPP
 
 #include <cstdint>
 

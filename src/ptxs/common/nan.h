@@ -1,5 +1,5 @@
-#ifndef NAN_H
-#define NAN_H
+#ifndef PTXS_COMMON_NAN_H
+#define PTXS_COMMON_NAN_H
 
 #include "bitcast.h"
 

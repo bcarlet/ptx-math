@@ -1,5 +1,5 @@
-#ifndef TESTING_HPP
-#define TESTING_HPP
+#ifndef TUNING_BASE_TESTING_HPP
+#define TUNING_BASE_TESTING_HPP
 
 #include "counters.hpp"
 #include "interval.hpp"

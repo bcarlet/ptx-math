@@ -1,5 +1,5 @@
-#ifndef RRO_SINCOS_H
-#define RRO_SINCOS_H
+#ifndef PTXS_REDUCTION_RRO_SINCOS_H
+#define PTXS_REDUCTION_RRO_SINCOS_H
 
 #include <stdint.h>
 

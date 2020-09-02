@@ -1,5 +1,5 @@
-#ifndef COEFFICIENTS_HPP
-#define COEFFICIENTS_HPP
+#ifndef TUNING_COEFFICIENTS_HPP
+#define TUNING_COEFFICIENTS_HPP
 
 #include <array>
 #include <tuple>

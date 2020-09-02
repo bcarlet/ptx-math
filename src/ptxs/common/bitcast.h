@@ -1,5 +1,5 @@
-#ifndef BITCAST_H
-#define BITCAST_H
+#ifndef PTXS_COMMON_BITCAST_H
+#define PTXS_COMMON_BITCAST_H
 
 #include <stdint.h>
 #include <string.h>

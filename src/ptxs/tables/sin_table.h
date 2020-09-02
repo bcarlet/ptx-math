@@ -1,5 +1,5 @@
-#ifndef SIN_TABLE_H
-#define SIN_TABLE_H
+#ifndef PTXS_TABLES_SIN_TABLE_H
+#define PTXS_TABLES_SIN_TABLE_H
 
 #include <stdint.h>
 

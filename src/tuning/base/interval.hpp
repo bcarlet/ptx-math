@@ -1,5 +1,5 @@
-#ifndef INTERVAL_HPP
-#define INTERVAL_HPP
+#ifndef TUNING_BASE_INTERVAL_HPP
+#define TUNING_BASE_INTERVAL_HPP
 
 struct interval
 {

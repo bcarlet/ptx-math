@@ -1,5 +1,5 @@
-#ifndef BINSEARCH_HPP
-#define BINSEARCH_HPP
+#ifndef TUNING_ALGORITHM_BINSEARCH_HPP
+#define TUNING_ALGORITHM_BINSEARCH_HPP
 
 #include <cstdint>
 

@@ -1,5 +1,5 @@
-#ifndef LG2_TABLE_H
-#define LG2_TABLE_H
+#ifndef PTXS_TABLES_LG2_TABLE_H
+#define PTXS_TABLES_LG2_TABLE_H
 
 #include <stdint.h>
 

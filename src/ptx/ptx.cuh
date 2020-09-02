@@ -1,5 +1,5 @@
-#ifndef PTX_CUH
-#define PTX_CUH
+#ifndef PTX_PTX_CUH
+#define PTX_PTX_CUH
 
 #include <cuda_runtime.h>
 

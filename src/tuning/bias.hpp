@@ -1,5 +1,5 @@
-#ifndef BIAS_HPP
-#define BIAS_HPP
+#ifndef TUNING_BIAS_HPP
+#define TUNING_BIAS_HPP
 
 #include <tuple>
 

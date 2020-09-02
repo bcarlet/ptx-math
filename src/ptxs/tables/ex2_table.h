@@ -1,5 +1,5 @@
-#ifndef EX2_TABLE_H
-#define EX2_TABLE_H
+#ifndef PTXS_TABLES_EX2_TABLE_H
+#define PTXS_TABLES_EX2_TABLE_H
 
 #include <stdint.h>
 
