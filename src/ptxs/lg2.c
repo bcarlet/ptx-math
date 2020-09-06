@@ -3,9 +3,9 @@
 
 #include "tables/lg2_table.h"
 #include "common/bitcast.h"
-#include "common/fpmanip.h"
 #include "common/nan.h"
 #include "common/squarer.h"
+#include "common/util.h"
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -88,7 +88,7 @@ float ptxs_param_lg2(float x, const ptxs_params *params)
         }
     }
 
-    const uint32_t r_frac = (sum >> (LG2_SUM_WEIGHT - 23)) & MASK_U32(23);
+    const uint32_t r_frac = EXTRACT_BITS(sum, 23, LG2_SUM_WEIGHT);
     const uint32_t r_sign = (x < 1.0f) ? 1u : 0u;
 
     const uint32_t r_bits = FP_FORMAT(r_sign, r_exp, r_frac);

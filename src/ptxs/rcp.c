@@ -3,9 +3,9 @@
 
 #include "tables/rcp_table.h"
 #include "common/bitcast.h"
-#include "common/fpmanip.h"
 #include "common/nan.h"
 #include "common/squarer.h"
+#include "common/util.h"
 
 #include <math.h>
 
@@ -68,7 +68,7 @@ float ptxs_param_rcp(float x, const ptxs_params *params)
         sum <<= 1;
     }
 
-    const uint32_t r_frac = (sum >> (RCP_SUM_WEIGHT - 23)) & MASK_U32(23);
+    const uint32_t r_frac = EXTRACT_BITS(sum, 23, RCP_SUM_WEIGHT);
     const uint32_t r_sign = signbit(x) ? 1u : 0u;
 
     const uint32_t r_bits = FP_FORMAT(r_sign, r_exp, r_frac);

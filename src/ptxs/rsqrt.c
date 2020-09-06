@@ -3,9 +3,9 @@
 
 #include "tables/rsqrt_table.h"
 #include "common/bitcast.h"
-#include "common/fpmanip.h"
 #include "common/nan.h"
 #include "common/squarer.h"
+#include "common/util.h"
 
 #include <math.h>
 
@@ -55,7 +55,7 @@ float ptxs_param_rsqrt(float x, const ptxs_params *params)
         x_log2 -= 1;
         index += 1u << RSQRT_M;
     }
-    else if ((x_bits & MASK_U32(23)) == 0)
+    else if ((x_bits & MASK_U32(23)) == 0u)
     {
         return ldexpf(1.0f, -x_log2 / 2);
     }
@@ -74,9 +74,9 @@ float ptxs_param_rsqrt(float x, const ptxs_params *params)
 
     sum += params->bias >> ((64 - RSQRT_SUM_WEIGHT) + 23);
 
-    sum <<= 1;  // normalization
+    sum <<= 1;  // constant normalization
 
-    const uint32_t r_frac = (sum >> (RSQRT_SUM_WEIGHT - 23)) & MASK_U32(23);
+    const uint32_t r_frac = EXTRACT_BITS(sum, 23, RSQRT_SUM_WEIGHT);
     const uint32_t r_bits = FP_FORMAT(0u, 126u, r_frac);
 
     const float r = u32_as_float(r_bits);

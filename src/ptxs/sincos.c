@@ -1,12 +1,12 @@
 #include "models.h"
 #include "tuning.h"
 
-#include "reduction/rro_sincos.h"
 #include "tables/sin_table.h"
+#include "reduction/rro_sincos.h"
 #include "common/bitcast.h"
-#include "common/fpmanip.h"
 #include "common/nan.h"
 #include "common/squarer.h"
+#include "common/util.h"
 
 static uint32_t rro_internal(float, uint32_t *, uint32_t *);
 static float poly_sincos(uint32_t, uint32_t, const ptxs_params *);
@@ -92,7 +92,7 @@ float poly_sincos(uint32_t reduced, uint32_t sign, const ptxs_params *params)
         }
     }
 
-    const uint32_t r_frac = (sum >> (SIN_SUM_WEIGHT - 23)) & MASK_U32(23);
+    const uint32_t r_frac = EXTRACT_BITS(sum, 23, SIN_SUM_WEIGHT);
     const uint32_t r_bits = FP_FORMAT(sign, r_exp, r_frac);
 
     return u32_as_float(r_bits);

@@ -1,7 +1,7 @@
 #include "rro_sincos.h"
 
 #include "../common/bitcast.h"
-#include "../common/fpmanip.h"
+#include "../common/util.h"
 
 #include <math.h>
 
