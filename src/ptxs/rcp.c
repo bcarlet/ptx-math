@@ -22,7 +22,7 @@ float ptxs_rcp(float x)
 
 float ptxs_param_rcp(float x, const ptxs_params *params)
 {
-    int x_log2;
+    int x_log2 = 0;
 
     switch (fpclassify(x))
     {
@@ -33,13 +33,12 @@ float ptxs_param_rcp(float x, const ptxs_params *params)
     case FP_ZERO:
         return copysignf(INFINITY, x);
     case FP_SUBNORMAL:
-        x_log2 = ilogbf(x);
+        x_log2 = -24;
         x *= 0x1p24f;
         break;
-    case FP_NORMAL:
-        x_log2 = ilogbf(x);
-        break;
     }
+
+    x_log2 += ilogbf(x);
 
     const uint32_t x_bits = float_as_u32(x);
 

@@ -26,7 +26,7 @@ float ptxs_lg2(float x)
 
 float ptxs_param_lg2(float x, const ptxs_params *params)
 {
-    bool subnormal = false;
+    bool x_subnormal = false;
 
     switch (fpclassify(x))
     {
@@ -38,7 +38,7 @@ float ptxs_param_lg2(float x, const ptxs_params *params)
         return -INFINITY;
     case FP_SUBNORMAL:
         x *= 0x1p24f;
-        subnormal = true;
+        x_subnormal = true;
         break;
     }
 
@@ -95,5 +95,5 @@ float ptxs_param_lg2(float x, const ptxs_params *params)
 
     const float r = u32_as_float(r_bits);
 
-    return subnormal ? (r - 24.0f) : r;
+    return x_subnormal ? r - 24.0f : r;
 }

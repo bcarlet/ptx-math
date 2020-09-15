@@ -87,7 +87,7 @@ float ptxs_param_ex2(float x, const ptxs_params *params)
     const float r = u32_as_float(r_bits);
     const float reconstr = fexp2i(integral) * r;
 
-    return square_result ? (reconstr * reconstr) : reconstr;
+    return square_result ? reconstr * reconstr : reconstr;
 }
 
 int min(int a, int b)
