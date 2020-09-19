@@ -15,6 +15,11 @@ static const ptxm_params model_params =
     .bias = UINT64_C(0x7fff800000000000)
 };
 
+float ptxm_sqrt_sm5x(float x)
+{
+    return ptxm_rcp_sm5x(ptxm_rsqrt_sm5x(x));
+}
+
 float ptxm_sqrt_sm6x(float x)
 {
     return ptxm_sqrt_sm6x_internal(x, &model_params);

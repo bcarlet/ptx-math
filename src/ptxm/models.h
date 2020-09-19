@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 float ptxm_rcp_sm5x(float x);
+float ptxm_sqrt_sm5x(float x);
 float ptxm_sqrt_sm6x(float x);
 float ptxm_rsqrt_sm5x(float x);
 float ptxm_sin_sm5x(float x);
