@@ -11,7 +11,7 @@ static_assert(float_limits::is_iec559, "float not IEEE 754");
 static_assert(!float_limits::traps, "floating-point exceptions enabled");
 
 #include "ptx/ptx.cuh"
-#include "ptxs/models.h"
+#include "ptxm/models.h"
 #include "util/cuda.cuh"
 #include "util/devices.cuh"
 #include "util/progbar.hpp"
@@ -92,7 +92,7 @@ int main()
 
         CUDA_CHECK(cudaDeviceSynchronize());
 
-        num_exact += compare_batch(batch, x, ptxs_rcp);
+        num_exact += compare_batch(batch, x, ptxm_rcp_sm5x);
     }
 
     std::cout << bar.update(1.0f) << '\n';

@@ -1,0 +1,10 @@
+target_sources(ptxm PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/bitmask.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/util.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/bitcast.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/bitcast.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/nan.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/nan.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/squarer.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/squarer.h
+)
