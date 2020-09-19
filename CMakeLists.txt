@@ -6,6 +6,7 @@ set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CUDA_EXTENSIONS OFF)
 
+option(BUILD_SHARED_LIBS "Build as a shared library" OFF)
 option(PTXS_USE_PIC "Generate position-independent code" OFF)
 option(PTXS_ENABLE_CUDA "Enable targets requiring CUDA" ON)
 

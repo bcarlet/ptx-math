@@ -1,4 +1,4 @@
-add_library(ptxs STATIC
+add_library(ptxs
   models.h
   tuning.h
   params.h
