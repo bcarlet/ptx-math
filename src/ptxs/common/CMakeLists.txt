@@ -8,5 +8,3 @@ target_sources(ptxs PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/squarer.c
   ${CMAKE_CURRENT_SOURCE_DIR}/squarer.h
 )
-
-target_compile_options(ptxs PRIVATE $<$<C_COMPILER_ID:GNU>:-mbmi2>)
