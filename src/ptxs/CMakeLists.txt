@@ -24,3 +24,6 @@ endif()
 if(PTXS_USE_PIC)
   set_target_properties(ptxs PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
+
+install(TARGETS ptxs DESTINATION lib)
+install(FILES models.h DESTINATION include/ptxs)
