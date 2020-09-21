@@ -1,8 +1,12 @@
 #include <cuda_runtime.h>
+#include <cstdlib>
 #include <cstdint>
 #include <cstring>
 #include <limits>
 #include <iostream>
+#include <utility>
+#include <string>
+#include <map>
 
 using float_limits = std::numeric_limits<float>;
 
@@ -13,7 +17,6 @@ static_assert(!float_limits::traps, "floating-point exceptions enabled");
 #include "ptx/ptx.cuh"
 #include "ptxm/models.h"
 #include "util/cuda.cuh"
-#include "util/devices.cuh"
 #include "util/progbar.hpp"
 #include "util/pun.hpp"
 
@@ -53,56 +56,167 @@ static uint32_t compare_batch(uint32_t batch, const float *x, float (*f)(float))
         const float val = pun<float>(base_val + i);
         const float cmp = f(val);
 
-        if (std::memcmp(x + i, &cmp, sizeof(float)) == 0)
+        if (!std::memcmp(x + i, &cmp, sizeof(float)))
             num_exact++;
     }
 
     return num_exact;
 }
 
-int main()
+static uint64_t validate(void (*f)(int, float *), float (*g)(float),
+                         bool display_progress = true)
 {
-    std::cout << "Detecting devices...\n";
+    uint64_t num_exact = 0;
+    progbar progress;
 
-    const auto props = get_device_props();
+    float *x;
+    CUDA_CHECK(cudaMallocManaged(&x, BATCH_SIZE * sizeof(float)));
 
-    for (std::size_t i = 0; i < props.size(); i++)
+    for (uint32_t batch = 0; batch < BATCH_COUNT; batch++)
     {
-        std::cout << "Device " << i << ": " << props[i] << '\n';
+        if (display_progress)
+            std::cout << progress.update((float)batch / BATCH_COUNT);
+
+        initialize_batch(batch, x);
+
+        f<<<GRID_DIM, BLOCK_DIM>>>(BATCH_SIZE, x);
+        CUDA_CHECK(cudaPeekAtLastError());
+
+        CUDA_CHECK(cudaDeviceSynchronize());
+
+        num_exact += compare_batch(batch, x, g);
+    }
+
+    if (display_progress)
+        std::cout << progress.update(1.0f) << '\n';
+
+    CUDA_CHECK(cudaFree(x));
+
+    return num_exact;
+}
+
+using model_pair = std::pair<void (*)(int, float *), float (*)(float)>;
+using model_map = std::map<std::string, model_pair>;
+
+static std::ostream &operator<<(std::ostream &stream, const cudaDeviceProp &prop)
+{
+    return stream << prop.name << " (sm_" << prop.major << prop.minor << ')';
+}
+
+static void usage [[noreturn]] (const char *prog_name, const model_map &functions)
+{
+    std::cerr << "Usage: " << prog_name << " [-d <device-number>] <function>\n";
+    std::cerr << "\nAvailable functions:\n";
+
+    for (const auto &node : functions)
+    {
+        std::cerr << "  " << node.first << '\n';
+    }
+
+    std::cerr << "\nAvailable devices:\n";
+
+    int device_count;
+    CUDA_CHECK(cudaGetDeviceCount(&device_count));
+
+    for (int i = 0; i < device_count; i++)
+    {
+        cudaDeviceProp props;
+        CUDA_CHECK(cudaGetDeviceProperties(&props, i));
+
+        std::cerr << "  Device " << i << ": " << props << '\n';
+    }
+
+    std::exit(EXIT_FAILURE);
+}
+
+int main(int argc, char *argv[])
+{
+    model_map functions;
+
+    functions["rcp_sm5x"] = std::make_pair(map<ptx_instruction::RCP_APPROX_F32>, ptxm_rcp_sm5x);
+    functions["sqrt_sm5x"] = std::make_pair(map<ptx_instruction::SQRT_APPROX_F32>, ptxm_sqrt_sm5x);
+    functions["sqrt_sm6x"] = std::make_pair(map<ptx_instruction::SQRT_APPROX_F32>, ptxm_sqrt_sm6x);
+    functions["rsqrt_sm5x"] = std::make_pair(map<ptx_instruction::RSQRT_APPROX_F32>, ptxm_rsqrt_sm5x);
+    functions["sin_sm5x"] = std::make_pair(map<ptx_instruction::SIN_APPROX_F32>, ptxm_sin_sm5x);
+    functions["cos_sm5x"] = std::make_pair(map<ptx_instruction::COS_APPROX_F32>, ptxm_cos_sm5x);
+    functions["lg2_sm5x"] = std::make_pair(map<ptx_instruction::LG2_APPROX_F32>, ptxm_lg2_sm5x);
+    functions["ex2_sm5x"] = std::make_pair(map<ptx_instruction::EX2_APPROX_F32>, ptxm_ex2_sm5x);
+
+    const char *device_opt = nullptr;
+    const char *function_opt = nullptr;
+
+    for (int i = 1; i < argc; i++)
+    {
+        if (!std::strcmp(argv[i], "-d") && !device_opt)
+        {
+            if (i + 1 < argc)
+                device_opt = argv[++i];
+            else
+                usage(argv[0], functions);
+        }
+        else if (!function_opt)
+        {
+            function_opt = argv[i];
+        }
+        else
+        {
+            usage(argv[0], functions);
+        }
+    }
+
+    if (device_opt)
+    {
+        int device;
+
+        try {
+            device = std::stoi(device_opt);
+        } catch (...) {
+            usage(argv[0], functions);
+        }
+
+        int device_count;
+        CUDA_CHECK(cudaGetDeviceCount(&device_count));
+
+        if (device < 0 || device >= device_count)
+            usage(argv[0], functions);
+
+        CUDA_CHECK(cudaSetDevice(device));
+    }
+
+    const model_pair *model;
+
+    if (function_opt)
+    {
+        const auto lookup = functions.find(function_opt);
+
+        if (lookup != functions.end())
+            model = &lookup->second;
+        else
+            usage(argv[0], functions);
+    }
+    else
+    {
+        usage(argv[0], functions);
     }
 
     int device;
     CUDA_CHECK(cudaGetDevice(&device));
 
-    std::cout << "Using device " << device << ".\nRunning simulation...\n";
+    cudaDeviceProp props;
+    CUDA_CHECK(cudaGetDeviceProperties(&props, device));
 
-    float *x;
-    CUDA_CHECK(cudaMallocManaged(&x, BATCH_SIZE * sizeof(float)));
+    std::cout << "Using device: " << props << '\n';
+    std::cout << "Testing function: " << function_opt << '\n';
+    std::cout << "Running simulation...\n";
 
-    progbar bar;
-    uint64_t num_exact = 0;
-
-    for (uint32_t batch = 0; batch < BATCH_COUNT; batch++)
-    {
-        std::cout << bar.update((float)batch / BATCH_COUNT);
-        initialize_batch(batch, x);
-
-        map<ptx_instruction::RCP_APPROX_F32><<<GRID_DIM, BLOCK_DIM>>>(BATCH_SIZE, x);
-        CUDA_CHECK(cudaPeekAtLastError());
-
-        CUDA_CHECK(cudaDeviceSynchronize());
-
-        num_exact += compare_batch(batch, x, ptxm_rcp_sm5x);
-    }
-
-    std::cout << bar.update(1.0f) << '\n';
-
-    const char *const result = (num_exact == UINT64_C(4294967296)) ? "OK" : "FAIL";
+    const uint64_t num_exact = validate(model->first, model->second);
 
     std::cout << "Bit-exact: " << num_exact << '\n';
-    std::cout << "Result: " << result << '\n';
 
-    CUDA_CHECK(cudaFree(x));
+    if (num_exact == (UINT64_C(1) << 32))
+        std::cout << "Result: OK\n";
+    else
+        std::cout << "Result: FAIL\n";
 
-    return 0;
+    return EXIT_SUCCESS;
 }
