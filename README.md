@@ -30,11 +30,11 @@ Available options:
 - `-DPTXM_USE_PIC=ON` to generate position-independent code (automatic for shared libraries)
 - `-DPTXM_ENABLE_CUDA=OFF` to disable targets requiring CUDA (namely `ptxmvalidate`)
 
-Building requires compilers for C11 and C++11. CUDA is not required to build/use the main library and can be disabled with the provided option. The PTXM library requires support for the BMI2 extension.
+Building requires compilers for C11 and C++11. Components requiring CUDA are optional and can be disabled with the provided CMake option. The PTXM library requires support for the BMI2 extension.
 
 ## Compatibility
 
-Provided are results of exhaustive tests with GPUs of various compute capability. The table indicates, for each function and architecture, whether the function produced values identical to those of the corresponding PTX instruction executed on a test GPU from the given architecture. These tests are exhaustive across all single-precision inputs.
+Provided are results of exhaustive tests with GPUs of various compute capability. The table indicates, for each function and architecture, whether the function produced output identical to that of the corresponding PTX instruction executed on a test GPU from the given architecture. Output is compared across all single-precision inputs.
 
 |                   | sm_5x | sm_6x | sm_70 | sm_75 |
 | :---              | :---: | :---: | :---: | :---: |
