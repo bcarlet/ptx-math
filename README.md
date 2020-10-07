@@ -12,7 +12,7 @@ There are presently implementations for:
 - `lg2.approx.f32`
 - `ex2.approx.f32`
 
-See the validation section for information on device compatibility.
+Note that compatibility varies with GPU architecture. Function aliases mapping to the correct implementation are defined for each supported architecture.
 
 ## Building
 
@@ -56,6 +56,8 @@ Provided are results of validation tests with GPUs of various compute capability
 | `ptxm_cos_sm5x`   |   Yes   |   Yes   |    -    |    -    |
 | `ptxm_lg2_sm5x`   |   Yes   |   Yes   |   Yes   |   Yes   |
 | `ptxm_ex2_sm5x`   |   Yes   |   Yes   |   Yes   |   Yes   |
+
+Function aliases are set in accordance with this table.
 
 ## License
 

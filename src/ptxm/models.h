@@ -18,4 +18,27 @@ float ptxm_ex2_sm5x(float x);
 }   // extern "C"
 #endif
 
+#define ptxm_rcp_sm6x ptxm_rcp_sm5x
+#define ptxm_rcp_sm70 ptxm_rcp_sm5x
+#define ptxm_rcp_sm75 ptxm_rcp_sm5x
+
+#define ptxm_sqrt_sm70 ptxm_sqrt_sm6x
+#define ptxm_sqrt_sm75 ptxm_sqrt_sm6x
+
+#define ptxm_rsqrt_sm6x ptxm_rsqrt_sm5x
+#define ptxm_rsqrt_sm70 ptxm_rsqrt_sm5x
+#define ptxm_rsqrt_sm75 ptxm_rsqrt_sm5x
+
+#define ptxm_sin_sm6x ptxm_sin_sm5x
+
+#define ptxm_cos_sm6x ptxm_cos_sm5x
+
+#define ptxm_lg2_sm6x ptxm_lg2_sm5x
+#define ptxm_lg2_sm70 ptxm_lg2_sm5x
+#define ptxm_lg2_sm75 ptxm_lg2_sm5x
+
+#define ptxm_ex2_sm6x ptxm_ex2_sm5x
+#define ptxm_ex2_sm70 ptxm_ex2_sm5x
+#define ptxm_ex2_sm75 ptxm_ex2_sm5x
+
 #endif
