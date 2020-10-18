@@ -12,7 +12,7 @@ There are presently implementations for:
 - `lg2.approx.f32`
 - `ex2.approx.f32`
 
-Note that compatibility varies with GPU architecture. Function aliases mapping to the correct implementation are defined for each supported architecture.
+Note that compatibility varies with GPU architecture. Function aliases mapping to the correct implementations are defined for each supported architecture.
 
 ## Building
 
@@ -30,7 +30,7 @@ Available options:
 - `-DPTXM_USE_PIC=ON` to generate position-independent code (automatic for shared libraries)
 - `-DPTXM_ENABLE_CUDA=OFF` to disable targets requiring CUDA (namely `ptxmvalidate`)
 
-Building requires compilers for C11 and C++11. Components requiring CUDA are optional and can be disabled with the provided CMake option. The PTXM library requires support for the BMI2 extension.
+Building requires compilers for C11 and C++11. Components requiring CUDA are optional and can be disabled with the provided CMake option. The PTXM library requires processor support for the BMI2 x86 extension.
 
 ## Caveats
 
