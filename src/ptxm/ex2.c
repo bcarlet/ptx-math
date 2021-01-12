@@ -85,9 +85,9 @@ float ptxm_ex2_sm5x_internal(float x, const ptxm_params *params)
     const uint32_t r_bits = FP_FORMAT(0u, 127u, r_frac);
 
     const float r = u32_as_float(r_bits);
-    const float reconstr = fexp2i(integral) * r;
+    const float rec = fexp2i(integral) * r;
 
-    return square_result ? reconstr * reconstr : reconstr;
+    return square_result ? rec * rec : rec;
 }
 
 int min(int a, int b)

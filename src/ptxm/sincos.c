@@ -27,7 +27,7 @@ float ptxm_sin_sm5x_internal(float x, const ptxm_params *params)
     uint32_t sign, quadrant;
     uint32_t reduced = rro_internal(x, &sign, &quadrant);
 
-    if (quadrant >> 7) return ptxm_nan();
+    if (quadrant & 0x80u) return ptxm_nan();
 
     if (quadrant & 1u) reduced = ~reduced;
     if (quadrant & 2u) sign = !sign;
@@ -40,7 +40,7 @@ float ptxm_cos_sm5x(float x)
     uint32_t sign, quadrant;
     uint32_t reduced = rro_internal(x, &sign, &quadrant);
 
-    if (quadrant >> 7) return ptxm_nan();
+    if (quadrant & 0x80u) return ptxm_nan();
 
     sign = 0u;
 
@@ -52,12 +52,12 @@ float ptxm_cos_sm5x(float x)
 
 uint32_t rro_internal(float x, uint32_t *sign, uint32_t *quadrant)
 {
-    const uint32_t rr = ptxm_rro_sincos_sm5x(x);
+    const uint32_t packed = ptxm_rro_sincos_sm5x(x);
 
-    *sign = rr >> 31;
-    *quadrant = (rr >> 23) & MASK_U32(8);
+    *sign = packed >> 31;
+    *quadrant = (packed >> 23) & MASK_U32(8);
 
-    return rr;
+    return packed;
 }
 
 float poly_sincos(uint32_t reduced, uint32_t sign, const ptxm_params *params)

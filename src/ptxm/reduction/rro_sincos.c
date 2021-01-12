@@ -52,15 +52,12 @@ uint32_t ptxm_rro_sincos_sm5x(float x)
     const double reduced = x - k * SINCOS_PI_2;     // may be contracted
     const double clamped = fmin(fmax(reduced, 0.0), SINCOS_Q0_MAX);
 
-    uint32_t q = k & MASK_U64(2);
-    uint32_t r = lerp_sincos(clamped);
+    const uint32_t q = k & MASK_U64(2);
+    const uint32_t r = lerp_sincos(clamped);
 
-    const int x_log2 = ilogbf(x);
+    const uint32_t packed = FP_FORMAT(sign, q, r);
 
-    q &= ~MASK_U32(max(x_log2 - 31, 0));
-    r &= ~MASK_U32(max(x_log2 - 8, 0));
-
-    return FP_FORMAT(sign, q, r);
+    return packed & ~MASK_U32(max(ilogbf(x) - 8, 0));
 }
 
 int min(int a, int b)
