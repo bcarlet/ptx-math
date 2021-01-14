@@ -53,7 +53,9 @@ Provided are results of validation tests with GPUs of various compute capability
 | `ptxm_sqrt_sm6x`  |    -    |   Yes   |   Yes   |   Yes   |
 | `ptxm_rsqrt_sm5x` |   Yes   |   Yes   |   Yes   |   Yes   |
 | `ptxm_sin_sm5x`   |   Yes   |   Yes   |    -    |    -    |
+| `ptxm_sin_sm70`   |    -    |    -    |   Yes   |   Yes   |
 | `ptxm_cos_sm5x`   |   Yes   |   Yes   |    -    |    -    |
+| `ptxm_cos_sm70`   |    -    |    -    |   Yes   |   Yes   |
 | `ptxm_lg2_sm5x`   |   Yes   |   Yes   |   Yes   |   Yes   |
 | `ptxm_ex2_sm5x`   |   Yes   |   Yes   |   Yes   |   Yes   |
 
