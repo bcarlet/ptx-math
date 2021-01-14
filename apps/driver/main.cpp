@@ -29,7 +29,9 @@ int main(int argc, char *argv[])
     functions["sqrt_sm6x"] = ptxm_sqrt_sm6x;
     functions["rsqrt_sm5x"] = ptxm_rsqrt_sm5x;
     functions["sin_sm5x"] = ptxm_sin_sm5x;
+    functions["sin_sm70"] = ptxm_sin_sm70;
     functions["cos_sm5x"] = ptxm_cos_sm5x;
+    functions["cos_sm70"] = ptxm_cos_sm70;
     functions["lg2_sm5x"] = ptxm_lg2_sm5x;
     functions["ex2_sm5x"] = ptxm_ex2_sm5x;
 

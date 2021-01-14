@@ -10,7 +10,9 @@ float ptxm_sqrt_sm5x(float x);
 float ptxm_sqrt_sm6x(float x);
 float ptxm_rsqrt_sm5x(float x);
 float ptxm_sin_sm5x(float x);
+float ptxm_sin_sm70(float x);
 float ptxm_cos_sm5x(float x);
+float ptxm_cos_sm70(float x);
 float ptxm_lg2_sm5x(float x);
 float ptxm_ex2_sm5x(float x);
 
@@ -30,8 +32,10 @@ float ptxm_ex2_sm5x(float x);
 #define ptxm_rsqrt_sm75 ptxm_rsqrt_sm5x
 
 #define ptxm_sin_sm6x ptxm_sin_sm5x
+#define ptxm_sin_sm75 ptxm_sin_sm70
 
 #define ptxm_cos_sm6x ptxm_cos_sm5x
+#define ptxm_cos_sm75 ptxm_cos_sm70
 
 #define ptxm_lg2_sm6x ptxm_lg2_sm5x
 #define ptxm_lg2_sm70 ptxm_lg2_sm5x

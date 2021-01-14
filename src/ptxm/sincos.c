@@ -8,7 +8,11 @@
 #include "common/squarer.h"
 #include "common/util.h"
 
-static uint32_t rro_internal(float, uint32_t *, uint32_t *);
+#define RRO_SM5X ptxm_rro_sincos_sm5x
+#define RRO_SM70 ptxm_rro_sincos_sm70
+
+static float mufu_sin(uint32_t, const ptxm_params *);
+static float mufu_cos(uint32_t);
 static float poly_sincos(uint32_t, uint32_t, const ptxm_params *);
 
 static const ptxm_params model_params =
@@ -17,15 +21,21 @@ static const ptxm_params model_params =
     .bias = UINT64_C(0x0000000000000000)
 };
 
-float ptxm_sin_sm5x(float x)
-{
-    return ptxm_sin_sm5x_internal(x, &model_params);
-}
+float ptxm_sin_sm5x(float x) { return mufu_sin(RRO_SM5X(x), &model_params); }
+float ptxm_sin_sm70(float x) { return mufu_sin(RRO_SM70(x), &model_params); }
+
+float ptxm_cos_sm5x(float x) { return mufu_cos(RRO_SM5X(x)); }
+float ptxm_cos_sm70(float x) { return mufu_cos(RRO_SM70(x)); }
 
 float ptxm_sin_sm5x_internal(float x, const ptxm_params *params)
 {
-    uint32_t sign, quadrant;
-    uint32_t reduced = rro_internal(x, &sign, &quadrant);
+    return mufu_sin(RRO_SM5X(x), params);
+}
+
+float mufu_sin(uint32_t reduced, const ptxm_params *params)
+{
+    uint32_t sign = reduced >> 31;
+    uint32_t quadrant = (reduced >> 23) & MASK_U32(8);
 
     if (quadrant & 0x80u) return ptxm_nan();
 
@@ -35,10 +45,10 @@ float ptxm_sin_sm5x_internal(float x, const ptxm_params *params)
     return poly_sincos(reduced, sign, params);
 }
 
-float ptxm_cos_sm5x(float x)
+float mufu_cos(uint32_t reduced)
 {
-    uint32_t sign, quadrant;
-    uint32_t reduced = rro_internal(x, &sign, &quadrant);
+    uint32_t sign = reduced >> 31;
+    uint32_t quadrant = (reduced >> 23) & MASK_U32(8);
 
     if (quadrant & 0x80u) return ptxm_nan();
 
@@ -48,16 +58,6 @@ float ptxm_cos_sm5x(float x)
     if ((quadrant + 1u) & 2u) sign = 1u;
 
     return poly_sincos(reduced, sign, &model_params);
-}
-
-uint32_t rro_internal(float x, uint32_t *sign, uint32_t *quadrant)
-{
-    const uint32_t packed = ptxm_rro_sincos_sm5x(x);
-
-    *sign = packed >> 31;
-    *quadrant = (packed >> 23) & MASK_U32(8);
-
-    return packed;
 }
 
 float poly_sincos(uint32_t reduced, uint32_t sign, const ptxm_params *params)

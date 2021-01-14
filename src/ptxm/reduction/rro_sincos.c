@@ -60,6 +60,20 @@ uint32_t ptxm_rro_sincos_sm5x(float x)
     return packed & ~MASK_U32(max(ilogbf(x) - 8, 0));
 }
 
+uint32_t ptxm_rro_sincos_sm70(float x)
+{
+    uint32_t r = ptxm_rro_sincos_sm5x(x);
+
+    if (isnormal(x))
+    {
+        const double k = (double)x * SINCOS_PI_2_RCP;
+
+        r &= ~MASK_U32(min(max(ilogb(k), 0), 25));
+    }
+
+    return r;
+}
+
 int min(int a, int b)
 {
     return (a < b) ? a : b;

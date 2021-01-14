@@ -49,7 +49,7 @@ static void initialize_batch(uint32_t batch, float *x)
 static uint32_t compare_batch(uint32_t batch, const float *x, float (*f)(float))
 {
     const uint32_t base_val = batch * BATCH_SIZE;
-    uint32_t num_exact = 0;
+    uint32_t matching = 0;
 
     for (uint32_t i = 0; i < BATCH_SIZE; i++)
     {
@@ -57,16 +57,16 @@ static uint32_t compare_batch(uint32_t batch, const float *x, float (*f)(float))
         const float cmp = f(val);
 
         if (!std::memcmp(x + i, &cmp, sizeof(float)))
-            num_exact++;
+            matching++;
     }
 
-    return num_exact;
+    return matching;
 }
 
 static uint64_t validate(void (*f)(int, float *), float (*g)(float),
                          bool display_progress = true)
 {
-    uint64_t num_exact = 0;
+    uint64_t matching = 0;
     progbar progress;
 
     float *x;
@@ -84,7 +84,7 @@ static uint64_t validate(void (*f)(int, float *), float (*g)(float),
 
         CUDA_CHECK(cudaDeviceSynchronize());
 
-        num_exact += compare_batch(batch, x, g);
+        matching += compare_batch(batch, x, g);
     }
 
     if (display_progress)
@@ -92,7 +92,7 @@ static uint64_t validate(void (*f)(int, float *), float (*g)(float),
 
     CUDA_CHECK(cudaFree(x));
 
-    return num_exact;
+    return matching;
 }
 
 using model_pair = std::pair<void (*)(int, float *), float (*)(float)>;
@@ -138,7 +138,9 @@ int main(int argc, char *argv[])
     functions["sqrt_sm6x"] = std::make_pair(map<ptx_instruction::SQRT_APPROX_F32>, ptxm_sqrt_sm6x);
     functions["rsqrt_sm5x"] = std::make_pair(map<ptx_instruction::RSQRT_APPROX_F32>, ptxm_rsqrt_sm5x);
     functions["sin_sm5x"] = std::make_pair(map<ptx_instruction::SIN_APPROX_F32>, ptxm_sin_sm5x);
+    functions["sin_sm70"] = std::make_pair(map<ptx_instruction::SIN_APPROX_F32>, ptxm_sin_sm70);
     functions["cos_sm5x"] = std::make_pair(map<ptx_instruction::COS_APPROX_F32>, ptxm_cos_sm5x);
+    functions["cos_sm70"] = std::make_pair(map<ptx_instruction::COS_APPROX_F32>, ptxm_cos_sm70);
     functions["lg2_sm5x"] = std::make_pair(map<ptx_instruction::LG2_APPROX_F32>, ptxm_lg2_sm5x);
     functions["ex2_sm5x"] = std::make_pair(map<ptx_instruction::EX2_APPROX_F32>, ptxm_ex2_sm5x);
 
@@ -209,11 +211,11 @@ int main(int argc, char *argv[])
     std::cout << "Testing function: " << function_opt << '\n';
     std::cout << "Running simulation...\n";
 
-    const uint64_t num_exact = validate(model->first, model->second);
+    const uint64_t matching = validate(model->first, model->second);
 
-    std::cout << "Bit-exact: " << num_exact << '\n';
+    std::cout << "Matching: " << matching << '\n';
 
-    if (num_exact == (UINT64_C(1) << 32))
+    if (matching == (UINT64_C(1) << 32))
         std::cout << "Result: OK\n";
     else
         std::cout << "Result: FAIL\n";

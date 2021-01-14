@@ -4,5 +4,6 @@
 #include <stdint.h>
 
 uint32_t ptxm_rro_sincos_sm5x(float x);
+uint32_t ptxm_rro_sincos_sm70(float x);
 
 #endif
