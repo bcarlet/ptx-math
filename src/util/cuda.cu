@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <iostream>
 
-void cuda_error_check(cudaError_t code, const char *file, int line)
+void cuda_check(cudaError_t code, const char *file, int line)
 {
     if (code != cudaSuccess)
     {

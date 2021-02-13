@@ -14,11 +14,11 @@
 /**
  * Convenience macro for CUDA error checking.
  */
-#define CUDA_CHECK(errcode) cuda_error_check(errcode, __FILE__, __LINE__)
+#define CUDA_CHECK(errcode) cuda_check(errcode, __FILE__, __LINE__)
 
 /**
  * If code is not cudaSuccess, print an error message and terminate the program.
  */
-void cuda_error_check(cudaError_t code, const char *file, int line);
+void cuda_check(cudaError_t code, const char *file, int line);
 
 #endif

@@ -1,39 +1,43 @@
 #include "bias.hpp"
-#include "algorithm/binsearch.hpp"
+#include "binsearch.hpp"
 
-bias_results bias_search(const test_fn &test, const gen_fn<uint64_t> &model_gen)
+bias_results bias_search(float first, float last, const tester &t,
+                         const model_t<uint64_t> &model)
 {
     uint64_t bias;
-    basic_counters count;
+    sign_counter count;
 
-    uint64_t lower = 0;
-    uint64_t upper = UINT64_MAX;
+    using bs = binsearch<uint64_t>;
 
-    bs_state state = bin_search(lower, upper, bias);
+    bs search(0, UINT64_MAX);
+    bs::state state = bs::CONTINUE;
 
-    while (state == bs_state::CONTINUE)
+    while (state == bs::CONTINUE)
     {
-        count = test(model_gen(bias));
+        bias = search.test_point();
+
+        count.clear();
+        t.test(first, last, model(bias), count);
 
         if (count.regions > 1)
             break;
 
-        int test_cmp;
+        int cmp;
 
-        switch (count.last_sign)
+        switch (count.last())
         {
-        case basic_counters::NEGATIVE:
-            test_cmp = -1;
+        case sign_counter::NEGATIVE:
+            cmp = -1;
             break;
-        case basic_counters::POSITIVE:
-            test_cmp = 1;
+        case sign_counter::POSITIVE:
+            cmp = 1;
             break;
         default:
-            test_cmp = 0;
+            cmp = 0;
             break;
         }
 
-        state = bin_search(lower, upper, bias, test_cmp);
+        state = search.step(cmp);
     }
 
     return std::make_pair(bias, count);

@@ -1,15 +1,17 @@
 add_library(tuning STATIC
-  basic_counters.cpp
-  basic_counters.hpp
+  batching.cpp
+  batching.hpp
   bias.cpp
   bias.hpp
+  binsearch.hpp
   coefficients.cpp
   coefficients.hpp
-  test_handler.cpp
-  test_handler.hpp
+  counter.hpp
+  model.hpp
+  sign_counter.cpp
+  sign_counter.hpp
+  testing.cpp
+  testing.hpp
 )
-
-add_subdirectory(algorithm)
-add_subdirectory(base)
 
 target_compile_features(tuning PUBLIC cxx_std_11)

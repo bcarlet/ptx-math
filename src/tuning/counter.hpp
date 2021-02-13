@@ -1,15 +1,15 @@
-#ifndef TUNING_BASE_COUNTERS_HPP
-#define TUNING_BASE_COUNTERS_HPP
+#ifndef TUNING_COUNTER_HPP
+#define TUNING_COUNTER_HPP
 
 #include <cstddef>
 
-class counters
+class counter
 {
 public:
     virtual void accumulate(std::size_t n, const float *reference, const float *model) = 0;
 
 protected:
-    ~counters() = default;
+    ~counter() = default;
 };
 
 #endif

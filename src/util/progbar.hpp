@@ -13,8 +13,7 @@ public:
     explicit progbar(std::string prefix = "Progress: ", int width = 50);
 
     /**
-     * Set the progress to a fraction in the range [0, 1], and return the
-     * progress bar.
+     * Set the progress to a fraction in the range [0, 1].
      */
     progbar &update(float fract);
 

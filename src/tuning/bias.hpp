@@ -3,15 +3,16 @@
 
 #include <tuple>
 
-#include "base/fntypes.hpp"
-#include "basic_counters.hpp"
-#include "test_handler.hpp"
+#include "model.hpp"
+#include "sign_counter.hpp"
+#include "testing.hpp"
 
 /**
  * Wraps the resulting bias and the test counters obtained with that bias.
  */
-using bias_results = std::pair<uint64_t, basic_counters>;
+using bias_results = std::pair<uint64_t, sign_counter>;
 
-bias_results bias_search(const test_fn &test, const gen_fn<uint64_t> &model_gen);
+bias_results bias_search(float first, float last, const tester &t,
+                         const model_t<uint64_t> &model);
 
 #endif
