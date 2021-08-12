@@ -22,7 +22,7 @@ public:
     {
     }
 
-    T test_point() const
+    T point() const
     {
         return test;
     }

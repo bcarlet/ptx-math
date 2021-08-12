@@ -23,11 +23,10 @@ public:
      */
     friend std::ostream &operator<<(std::ostream &stream, const progbar &bar);
 
-    float fraction;
-
 private:
     std::string prefix;
     int width;
+    float fraction;
 };
 
 #endif

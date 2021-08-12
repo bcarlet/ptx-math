@@ -1,45 +1,47 @@
 #include "coefficients.hpp"
 #include "bias.hpp"
 
+#include <cstddef>
+
 enum direction
 {
-    DOWN, UP, UNKNOWN
+    DOWN,
+    UP,
+    UNKNOWN
 };
 
-static direction get_dir(coeff_sign config, sign_counter::error_sign last)
+std::tuple<uint64_t, std::array<uint32_t, 3>, counters>
+coefficient_search(const eval_t<uint64_t, const std::array<uint32_t, 3> &> &eval,
+                   const std::array<bool, 3> &negated,
+                   const std::array<uint32_t, 3> &initial)
 {
-    const bool config_is_neg = (config == coeff_sign::NEGATIVE);
-    const bool last_is_neg = (last == sign_counter::NEGATIVE);
+    counters count;
 
-    return (config_is_neg != last_is_neg) ? UP : DOWN;
-}
-
-coeff_results coeff_search(float first, float last, const tester &t,
-                           const model_t<uint64_t, const vec3<uint32_t> &> &model,
-                           const vec3<coeff_sign> &config,
-                           const vec3<uint32_t> &initial)
-{
     uint64_t bias;
-    vec3<uint32_t> coeff = initial;
-    sign_counter count;
+    std::array<uint32_t, 3> coefficients = initial;
 
-    const auto bs_model = [&coeff, &model](uint64_t bias) -> tester::map_t
+    const auto bias_eval = [&coefficients, &eval](uint64_t bias) -> counters
     {
-        return model(bias, coeff);
+        return eval(bias, coefficients);
     };
 
-    vec3<direction> directions = {UNKNOWN, UNKNOWN, UNKNOWN};
+    std::array<direction, 3> directions = {UNKNOWN, UNKNOWN, UNKNOWN};
 
     while (true)
     {
-        std::tie(bias, count) = bias_search(first, last, t, bs_model);
+        std::tie(bias, count) = bias_search(bias_eval);
 
-        if (count.regions == 0 || count.regions > 3)
+        if (count.regions() == 0u)
             break;
 
-        std::size_t edit = count.regions - 1;
+        if (count.regions() > 3u)
+            break;
 
-        direction dir = get_dir(config[edit], count.last());
+        std::size_t edit = count.regions() - 1u;
+        direction dir = (count.last() == counters::NEGATIVE) ? UP : DOWN;
+
+        if (negated[edit])
+            dir = (dir == DOWN) ? UP : DOWN;
 
         if (directions[edit] == UNKNOWN)
         {
@@ -47,16 +49,14 @@ coeff_results coeff_search(float first, float last, const tester &t,
         }
         else if (directions[edit] != dir)
         {
-            if (++edit > 2)
+            if (++edit > 2u)
                 break;
-
-            dir = directions[edit] == UP ? UP : DOWN;     // DOWN is arbitrary for UNKNOWN case
         }
 
-        if (dir == DOWN)
-            coeff[edit]--;
+        if (directions[edit] == DOWN)
+            coefficients[edit]--;
         else
-            coeff[edit]++;
+            coefficients[edit]++;   // UP is arbitrary for UNKNOWN case
 
         for (std::size_t i = 0; i < edit; i++)
         {
@@ -64,5 +64,5 @@ coeff_results coeff_search(float first, float last, const tester &t,
         }
     }
 
-    return std::make_tuple(bias, coeff, count);
+    return std::make_tuple(bias, coefficients, count);
 }

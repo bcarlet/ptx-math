@@ -1,9 +1,11 @@
 #include "progbar.hpp"
 
+#include <utility>
+
 progbar::progbar(std::string prefix, int width) :
-    fraction(0.0f),
-    prefix(prefix),
-    width(width)
+    prefix(std::move(prefix)),
+    width(width),
+    fraction(0.0f)
 {
 }
 
