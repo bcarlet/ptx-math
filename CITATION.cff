@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Carleton
+    given-names: Benjamin
+date-released: 2021-08-14
+repository-code: "https://github.com/bcarlet/ptx-math"
+title: "PTX Math: A C implementation of the PTX elementary math functions"

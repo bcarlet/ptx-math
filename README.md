@@ -1,4 +1,4 @@
-# PTX-Math
+# PTX Math
 
 PTXM provides bit-accurate implementations of the elementary function approximation instructions available in Nvidia's PTX ISA.
 
