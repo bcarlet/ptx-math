@@ -28,7 +28,7 @@ static constexpr int GRID_DIM = BATCH_SIZE / BLOCK_DIM;
 
 template<ptx::opcode I>
 __global__
-static void map(int n, float *x)
+static void map(int n, typename ptx::asm_traits<I>::operand_type *x)
 {
     GRID_STRIDE_LOOP(i, n)
     {
