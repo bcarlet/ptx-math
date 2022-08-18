@@ -3,40 +3,30 @@
 
 #include <limits>
 
-std::pair<uint64_t, counters> bias_search(const eval_t<uint64_t> &eval)
+namespace tuning
 {
-    using bs = binsearch<uint64_t>;
-    using limits = std::numeric_limits<uint64_t>;
 
-    counters count;
+std::pair<bias_t, error> bias_search(const eval_t<bias_t> &eval)
+{
+    using bs = binsearch<bias_t>;
+    using limits = std::numeric_limits<bias_t>;
 
     bs search(limits::lowest(), limits::max());
-    bs::state state = bs::CONTINUE;
+    bs::state state;
+    error err;
 
-    while (state == bs::CONTINUE)
+    do
     {
-        count = eval(search.point());
+        err = eval(search.point());
 
-        if (count.regions() > 1u)
+        if (err.regions != 1u)
             break;
 
-        int cmp;
+        state = search.step((err.rightmost == error::NON_NEGATIVE) ? 1 : -1);
 
-        switch (count.last())
-        {
-        case counters::NEGATIVE:
-            cmp = -1;
-            break;
-        case counters::POSITIVE:
-            cmp = 1;
-            break;
-        default:
-            cmp = 0;
-            break;
-        }
+    } while (state == bs::CONTINUE);
 
-        state = search.step(cmp);
-    }
-
-    return std::make_pair(search.point(), count);
+    return std::make_pair(search.point(), err);
 }
+
+}   // namespace tuning

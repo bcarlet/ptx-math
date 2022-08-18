@@ -4,7 +4,12 @@
 #include <limits>
 #include <type_traits>
 
-template<class T, class = typename std::enable_if<std::is_unsigned<T>::value>::type>
+namespace tuning
+{
+
+template<
+    class T,
+    class = typename std::enable_if<std::is_unsigned<T>::value>::type>
 class binsearch
 {
 public:
@@ -16,48 +21,50 @@ public:
     };
 
     binsearch(T left, T right) :
-        left(left),
-        right(right),
-        test(left + (right - left) / 2u)
+        m_left(left),
+        m_right(right),
+        m_test(left + (right - left) / 2u)
     {
     }
 
     T point() const
     {
-        return test;
+        return m_test;
     }
 
     state step(int cmp)
     {
         if (cmp < 0)
         {
-            if (test == std::numeric_limits<T>::max())
+            if (m_test == std::numeric_limits<T>::max())
                 return FAIL;
             else
-                left = test + 1u;
+                m_left = m_test + 1u;
         }
         else if (cmp > 0)
         {
-            if (test == std::numeric_limits<T>::lowest())
+            if (m_test == std::numeric_limits<T>::lowest())
                 return FAIL;
             else
-                right = test - 1u;
+                m_right = m_test - 1u;
         }
         else
         {
             return SUCCESS;
         }
 
-        if (left > right)
+        if (m_left > m_right)
             return FAIL;
 
-        test = left + (right - left) / 2u;
+        m_test = m_left + (m_right - m_left) / 2u;
 
         return CONTINUE;
     }
 
 private:
-    T left, right, test;
+    T m_left, m_right, m_test;
 };
+
+}   // namespace tuning
 
 #endif

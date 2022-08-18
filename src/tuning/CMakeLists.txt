@@ -5,8 +5,6 @@ add_library(tuning STATIC
   coefficients.cpp
   coefficients.hpp
   common.hpp
-  counters.cpp
-  counters.hpp
 )
 
 target_compile_features(tuning PUBLIC cxx_std_11)
