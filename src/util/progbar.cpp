@@ -1,6 +1,10 @@
 #include "progbar.hpp"
 
+#include <ostream>
 #include <utility>
+
+namespace util
+{
 
 progbar::progbar(std::string prefix, int width) :
     prefix(std::move(prefix)),
@@ -24,11 +28,10 @@ std::ostream &operator<<(std::ostream &stream, const progbar &bar)
 
     for (int i = 0; i < bar.width; i++)
     {
-        const char c = (i < bar_chars) ? '#' : ' ';
-        stream << c;
+        stream << ((i < bar_chars) ? '#' : ' ');
     }
 
-    stream << '[' << percentage << "%]" << std::flush;
-
-    return stream;
+    return stream << '[' << percentage << "%]" << std::flush;
 }
+
+}   // namespace util

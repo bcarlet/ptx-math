@@ -26,13 +26,13 @@ static constexpr uint32_t BATCH_COUNT = (UINT64_C(1) << 32) / BATCH_SIZE;
 static constexpr int BLOCK_DIM = 1 << 8;
 static constexpr int GRID_DIM = BATCH_SIZE / BLOCK_DIM;
 
-template<ptx_instruction I>
+template<ptx::opcode I>
 __global__
 static void map(int n, float *x)
 {
     GRID_STRIDE_LOOP(i, n)
     {
-        ptx_asm<I>::exec(x + i);
+        ptx::asm_traits<I>::exec(x + i);
     }
 }
 
@@ -42,7 +42,7 @@ static void initialize_batch(uint32_t batch, float *x)
 
     for (uint32_t i = 0; i < BATCH_SIZE; i++)
     {
-        x[i] = pun<float>(base_val + i);
+        x[i] = util::pun<float>(base_val + i);
     }
 }
 
@@ -53,7 +53,7 @@ static uint32_t compare_batch(uint32_t batch, const float *x, float (*f)(float))
 
     for (uint32_t i = 0; i < BATCH_SIZE; i++)
     {
-        const float val = pun<float>(base_val + i);
+        const float val = util::pun<float>(base_val + i);
         const float cmp = f(val);
 
         if (!std::memcmp(x + i, &cmp, sizeof(float)))
@@ -67,7 +67,7 @@ static uint64_t validate(void (*f)(int, float *), float (*g)(float),
                          bool display_progress = true)
 {
     uint64_t matching = 0;
-    progbar progress;
+    util::progbar progress;
 
     float *x;
     CUDA_CHECK(cudaMallocManaged(&x, BATCH_SIZE * sizeof(float)));
@@ -133,16 +133,16 @@ int main(int argc, char *argv[])
 {
     model_map functions;
 
-    functions["rcp_sm5x"] = std::make_pair(map<ptx_instruction::RCP_APPROX_F32>, ptxm_rcp_sm5x);
-    functions["sqrt_sm5x"] = std::make_pair(map<ptx_instruction::SQRT_APPROX_F32>, ptxm_sqrt_sm5x);
-    functions["sqrt_sm6x"] = std::make_pair(map<ptx_instruction::SQRT_APPROX_F32>, ptxm_sqrt_sm6x);
-    functions["rsqrt_sm5x"] = std::make_pair(map<ptx_instruction::RSQRT_APPROX_F32>, ptxm_rsqrt_sm5x);
-    functions["sin_sm5x"] = std::make_pair(map<ptx_instruction::SIN_APPROX_F32>, ptxm_sin_sm5x);
-    functions["sin_sm70"] = std::make_pair(map<ptx_instruction::SIN_APPROX_F32>, ptxm_sin_sm70);
-    functions["cos_sm5x"] = std::make_pair(map<ptx_instruction::COS_APPROX_F32>, ptxm_cos_sm5x);
-    functions["cos_sm70"] = std::make_pair(map<ptx_instruction::COS_APPROX_F32>, ptxm_cos_sm70);
-    functions["lg2_sm5x"] = std::make_pair(map<ptx_instruction::LG2_APPROX_F32>, ptxm_lg2_sm5x);
-    functions["ex2_sm5x"] = std::make_pair(map<ptx_instruction::EX2_APPROX_F32>, ptxm_ex2_sm5x);
+    functions["rcp_sm5x"] = std::make_pair(map<ptx::opcode::RCP_APPROX_F32>, ptxm_rcp_sm5x);
+    functions["sqrt_sm5x"] = std::make_pair(map<ptx::opcode::SQRT_APPROX_F32>, ptxm_sqrt_sm5x);
+    functions["sqrt_sm6x"] = std::make_pair(map<ptx::opcode::SQRT_APPROX_F32>, ptxm_sqrt_sm6x);
+    functions["rsqrt_sm5x"] = std::make_pair(map<ptx::opcode::RSQRT_APPROX_F32>, ptxm_rsqrt_sm5x);
+    functions["sin_sm5x"] = std::make_pair(map<ptx::opcode::SIN_APPROX_F32>, ptxm_sin_sm5x);
+    functions["sin_sm70"] = std::make_pair(map<ptx::opcode::SIN_APPROX_F32>, ptxm_sin_sm70);
+    functions["cos_sm5x"] = std::make_pair(map<ptx::opcode::COS_APPROX_F32>, ptxm_cos_sm5x);
+    functions["cos_sm70"] = std::make_pair(map<ptx::opcode::COS_APPROX_F32>, ptxm_cos_sm70);
+    functions["lg2_sm5x"] = std::make_pair(map<ptx::opcode::LG2_APPROX_F32>, ptxm_lg2_sm5x);
+    functions["ex2_sm5x"] = std::make_pair(map<ptx::opcode::EX2_APPROX_F32>, ptxm_ex2_sm5x);
 
     const char *device_opt = nullptr;
     const char *function_opt = nullptr;

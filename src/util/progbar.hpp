@@ -1,8 +1,11 @@
 #ifndef UTIL_PROGBAR_HPP
 #define UTIL_PROGBAR_HPP
 
-#include <ostream>
+#include <iosfwd>
 #include <string>
+
+namespace util
+{
 
 class progbar
 {
@@ -28,5 +31,7 @@ private:
     int width;
     float fraction;
 };
+
+}   // namespace util
 
 #endif

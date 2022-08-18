@@ -3,6 +3,9 @@
 
 #include <cstring>
 
+namespace util
+{
+
 /**
  * Reinterpret the bit representation of a value of type From as a value of type
  * To.
@@ -17,5 +20,7 @@ inline To pun(const From &x)
 
     return r;
 }
+
+}   // namespace util
 
 #endif

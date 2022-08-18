@@ -1,5 +1,4 @@
 add_library(util STATIC
-  cuda.cu
   cuda.cuh
   progbar.cpp
   progbar.hpp

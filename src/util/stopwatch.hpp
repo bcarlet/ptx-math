@@ -3,6 +3,9 @@
 
 #include <chrono>
 
+namespace util
+{
+
 class stopwatch
 {
 public:
@@ -41,5 +44,7 @@ public:
 private:
     clock::time_point begin;
 };
+
+}   // namespace util
 
 #endif

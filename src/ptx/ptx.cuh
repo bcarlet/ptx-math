@@ -3,7 +3,10 @@
 
 #include <cuda_runtime.h>
 
-enum class ptx_instruction
+namespace ptx
+{
+
+enum class opcode
 {
     RCP_APPROX_F32,
     SQRT_APPROX_F32,
@@ -14,14 +17,11 @@ enum class ptx_instruction
     EX2_APPROX_F32
 };
 
-template<ptx_instruction I>
-struct ptx_asm
-{
-    __device__ __forceinline__ static void exec(float *x);
-};
+template<opcode I>
+struct asm_traits {};
 
 template<>
-struct ptx_asm<ptx_instruction::RCP_APPROX_F32>
+struct asm_traits<opcode::RCP_APPROX_F32>
 {
     __device__ __forceinline__ static void exec(float *x)
     {
@@ -30,7 +30,7 @@ struct ptx_asm<ptx_instruction::RCP_APPROX_F32>
 };
 
 template<>
-struct ptx_asm<ptx_instruction::SQRT_APPROX_F32>
+struct asm_traits<opcode::SQRT_APPROX_F32>
 {
     __device__ __forceinline__ static void exec(float *x)
     {
@@ -39,7 +39,7 @@ struct ptx_asm<ptx_instruction::SQRT_APPROX_F32>
 };
 
 template<>
-struct ptx_asm<ptx_instruction::RSQRT_APPROX_F32>
+struct asm_traits<opcode::RSQRT_APPROX_F32>
 {
     __device__ __forceinline__ static void exec(float *x)
     {
@@ -48,7 +48,7 @@ struct ptx_asm<ptx_instruction::RSQRT_APPROX_F32>
 };
 
 template<>
-struct ptx_asm<ptx_instruction::SIN_APPROX_F32>
+struct asm_traits<opcode::SIN_APPROX_F32>
 {
     __device__ __forceinline__ static void exec(float *x)
     {
@@ -57,7 +57,7 @@ struct ptx_asm<ptx_instruction::SIN_APPROX_F32>
 };
 
 template<>
-struct ptx_asm<ptx_instruction::COS_APPROX_F32>
+struct asm_traits<opcode::COS_APPROX_F32>
 {
     __device__ __forceinline__ static void exec(float *x)
     {
@@ -66,7 +66,7 @@ struct ptx_asm<ptx_instruction::COS_APPROX_F32>
 };
 
 template<>
-struct ptx_asm<ptx_instruction::LG2_APPROX_F32>
+struct asm_traits<opcode::LG2_APPROX_F32>
 {
     __device__ __forceinline__ static void exec(float *x)
     {
@@ -75,12 +75,14 @@ struct ptx_asm<ptx_instruction::LG2_APPROX_F32>
 };
 
 template<>
-struct ptx_asm<ptx_instruction::EX2_APPROX_F32>
+struct asm_traits<opcode::EX2_APPROX_F32>
 {
     __device__ __forceinline__ static void exec(float *x)
     {
         asm("ex2.approx.f32 %0, %0;" : "+f"(*x));
     }
 };
+
+}   // namespace ptx
 
 #endif
