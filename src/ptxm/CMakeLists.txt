@@ -3,8 +3,10 @@ add_library(ptxm
   tuning.h
   params.h
   rcp.c
+  rcp_f64.c
   sqrt.c
   rsqrt.c
+  rsqrt_f64.c
   sincos.c
   lg2.c
   ex2.c

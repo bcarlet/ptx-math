@@ -16,6 +16,9 @@ float ptxm_cos_sm70(float x);
 float ptxm_lg2_sm5x(float x);
 float ptxm_ex2_sm5x(float x);
 
+double ptxm_rcp_ftz_f64_sm5x(double x);
+double ptxm_rsqrt_ftz_f64_sm5x(double x);
+
 #ifdef __cplusplus
 }   // extern "C"
 #endif
